@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>系統登入|FIOS Admin</title>
 
-    <link rel="icon" href="./wufulogo.png" type="image/x-icon"/>
+    <link rel="icon" href="./img/icon.png" type="image/x-icon"/>
 
     <!--  jQuery -->
     <script src="js/jquery-3.4.1.js"></script>
@@ -36,11 +36,8 @@
 
 </head>
 <body>
-<div class="jumbotron text-center" style="margin-bottom:0;padding-top: 20px;padding-bottom: 20px;">
-    <div class="container">
-        <h1>五福國中線上選社系統</h1>
-        <h4>WFJH Online Club Select System</h4>
-    </div>
+<div class="jumbotron text-center" id="title_bar" style="margin:0;padding: 10px 0px;background-color: #FFFFFF">
+    <img src="img/banner.png" style="display:block; margin:auto;width: 40%">
 </div>
 <div id="middle">
     <div class="container">
@@ -49,9 +46,9 @@
             <div class="alert alert-primary" role="alert" style="display: none;margin-top: 16px"
                  id="alert-primary"></div>
             <div class="alert alert-success" role="alert" style="display: none;margin-top: 16px" id="alert-success">
-                <div class="row">
+                <div class="row" style="line-height: 32px">
                     <div class="col-0">
-                        <div class="row" style="margin: 0px">
+                        <div class="row" style="margin: 0px;">
                             <i class="fa fa-check fa-2x" style="margin:0px 5px"></i><strong>成功：</strong>
                         </div>
                     </div>
@@ -61,7 +58,7 @@
                 </div>
             </div>
             <div class="alert alert-danger" role="alert" style="display: none;margin-top: 16px" id="alert-danger">
-                <div class="row">
+                <div class="row" style="line-height: 32px">
                     <div class="col-0">
                         <div class="row" style="margin: 0px">
                             <i class="fa fa-times fa-2x" style="padding:0px 5px;margin:0px 5px"></i><strong>錯誤：</strong>
@@ -73,7 +70,7 @@
                 </div>
             </div>
             <div class="alert alert-warning" role="alert" style="display: none;margin-top: 16px" id="alert-warning">
-                <div class="row">
+                <div class="row" style="line-height: 32px">
                     <div class="col-0">
                         <div class="row" style="margin: 0px">
                             <i class="fa fa-exclamation-circle fa-2x" style="margin:0px 5px"></i><strong>警告：</strong>
@@ -85,7 +82,7 @@
                 </div>
             </div>
             <div class="alert alert-info" role="alert" style="display: none;margin-top: 16px" id="alert-info">
-                <div class="row">
+                <div class="row" style="line-height: 32px">
                     <div class="col-0">
                         <div class="row" style="margin: 0px">
                             <i class="fa fa-info fa-2x" style="padding:0px 10px;margin:0px 5px"></i><strong>資訊：</strong>
@@ -93,25 +90,6 @@
                     </div>
                     <div class="col" style="padding-left: 0px">
                         <div id="alert-info-in"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="dialog_ProgressBar_Sync" class="modal inmodal fade" tabindex="-1" role="dialog" aria-hidden="true"
-             data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title ">
-                            資料同步中...
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                 style="width: 100%"></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -137,7 +115,15 @@
 </div>
 <script>
     $(document).ready(function () {
+        var r;
+        r=$.getJSON('config.json',function (json) {
+            r=json;
+        });
+        console.log(r);
+
         if ($.cookie('LoginInfoAcc')) {
+
+            //todo
             ShowAlart('alert-success', '你已登出!!', false, true);
 
             $.cookie("LoginInfoAcc", '', {expires: -1});

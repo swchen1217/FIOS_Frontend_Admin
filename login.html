@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="css/login.css">
     <!-- My js -->
     <script src="js/alert.js"></script>
+    <script src="js/config.js"></script>
 
 </head>
 <body>
@@ -115,12 +116,6 @@
 </div>
 <script>
     $(document).ready(function () {
-        var r;
-        r=$.getJSON('config.json',function (json) {
-            r=json;
-        });
-        console.log(r);
-
         if ($.cookie('LoginInfoAcc')) {
 
             //todo
@@ -134,11 +129,9 @@
 
             $.cookie("AllUserData", '', {expires: -1});
         }
-        if ($.cookie('acc')) {
-            var rem_acc = $.cookie('acc');
-            var rem_pw = $.cookie('pw');
-            $('#InputAcc').val(rem_acc);
-            $('#InputPw').val(rem_pw);
+        if ($.cookie('rm_refresh_token')) {
+            $('#InputAcc').val($.cookie('rm_account'));
+            $('#InputPw').val("********");
             $('#RemMe').attr('checked', true);
         }
         $('#form-login').submit(function () {
@@ -154,66 +147,14 @@
                 });
                 return false;
             }
-            // TODO
             $.ajax({
-                url: "../backend/user.php",
+                url: config['backend_URL']+"/oauth/token",
                 data: "mode=get_create_time&acc=" + input_acc,
                 type: "POST",
-                success: function (msg_st) {
+                contentType:"application/json",
+                success: function (responses) {
                     console.log('ajax su');
-                    if (msg_st == 'no_acc') {
-                        console.log('no_acc');
-                        $('#InputAcc').val('');
-                        $('#InputPw').val('');
-                        ShowAlart('alert-danger', '帳號錯誤!!,此帳號尚未註冊', false, true);
-                    } else {
-                        var mMd5 = md5(msg_st + input_pw);
-                        console.log(mMd5);
-                        $.ajax({
-                            url: "../backend/user.php",
-                            data: "mode=login_check&acc=" + input_acc + "&pw=" + mMd5,
-                            type: "POST",
-                            success: function (msg_nd) {
-                                console.log('ajax su');
-                                if (msg_nd.substring(0, 2) == 'ok') {
-                                    console.log('ok');
-                                    if (document.getElementById("RemMe").checked) {
-                                        $.cookie('acc', input_acc, {expires: 1});
-                                        $.cookie('pw', input_pw, {expires: 1});
-                                    } else {
-                                        $.cookie("acc", '', {expires: -1});
-                                        $.cookie("pw", '', {expires: -1});
-                                    }
-                                    var split_OkData = msg_nd.split(',');
-                                    $.cookie('LoginInfoAcc', input_acc);
-                                    $.cookie('LoginInfoPw', mMd5);
-                                    $.cookie('LoginInfoName', split_OkData[1]);
-                                    $.cookie('LoginInfoAdmin', split_OkData[2]);
-                                    $.cookie('LoginInfoClass', split_OkData[3]);
-                                    console.log('ok');
-                                    ShowAlart('alert-success', split_OkData[1] + ',歡迎回來', false, true);
-                                    setTimeout(function () {
-                                        location.replace("./index.html")
-                                    }, 1000);
-                                }
-                                if (msg_nd == 'pw_error') {
-                                    console.log('pw_error');
-                                    $('#InputAcc').val('');
-                                    $('#InputPw').val('');
-                                    ShowAlart('alert-danger', '密碼錯誤!!', false, true);
-                                }
-                            },
-                            error: function (xhr) {
-                                console.log('ajax er');
-                                $.alert({
-                                    title: '錯誤',
-                                    content: 'Ajax 發生錯誤',
-                                    type: 'red',
-                                    typeAnimated: true
-                                });
-                            }
-                        });
-                    }
+
                 },
                 error: function (xhr) {
                     console.log('ajax er');

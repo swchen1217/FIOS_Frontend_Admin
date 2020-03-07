@@ -149,33 +149,10 @@
                 });
                 return false;
             }
-            $.ajax({
-                url: config['backend_URL']+'/a',
-                //url: config['backend_URL']+"/oauth/token",
-                data: "{}",
-                type: "POST",
-                contentType: 'application/json; charset=UTF-8',
-                complete: function (xhr,s) {
-                    console.log('ajax complete');
-                    console.log(xhr);
-                    console.log(s);
-                    tmp=xhr;
-                },
-                success: function (responses) {
-                    console.log('ajax su');
-                    console.log(responses);
+            var data=;
+            var res=request('POST',)
 
-                },
-                error: function (xhr) {
-                    console.log('ajax er');
-                    $.alert({
-                        title: '錯誤',
-                        content: 'Ajax 發生錯誤',
-                        type: 'red',
-                        typeAnimated: true
-                    });
-                }
-            });
+
             return false;
         });
     });

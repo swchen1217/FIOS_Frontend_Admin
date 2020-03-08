@@ -149,10 +149,48 @@
                 });
                 return false;
             }
-            var data={'':''};
-            var res=request('POST',);
+            var data={grant_type:'password',client_id:config.client_id,client_secret:config.client_secret,username:input_acc,password:input_pw};
+            var res=request('POST','/oauth/token',data,false);
+            console.log(res);
+            if(res.code==200){
+                if(res.data.hasOwnProperty('access_token')){
 
+                }else{
 
+                }
+            }else if (res.code==401){
+                if(res.data.error=='Username or Password Error'){
+                    $.alert({
+                        title: '錯誤',
+                        content: '帳號或密碼錯誤!!請再試一次',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }else if(res.data.error=='invalid_client'){
+                    $.alert({
+                        title: '錯誤',
+                        content: 'Client Error!!請聯繫管理員',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }else {
+                    $.alert({
+                        title: '錯誤',
+                        content: '系統發生錯誤!!請聯繫管理員',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }
+                return false;
+            }else if (res.code==403){
+                $.alert({
+                    title: '錯誤',
+                    content: '登入失敗超過5次!!請稍後再試',
+                    type: 'red',
+                    typeAnimated: true
+                });
+                return false;
+            }
             return false;
         });
     });

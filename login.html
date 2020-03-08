@@ -97,6 +97,39 @@
             </div>
         </div>
 
+        <div class="modal fade bd-example-modal-xl" tabindex="-1" id="modal-verify">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">使用者驗證</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" class="form-my" id="form-verify">
+                            <h5><i class="fas fa-exclamation-circle" style="color: #d4af2f;padding:0px 5px;margin:0px 5px;font-size: 30px"></i>您的帳號有異常活動行為</h5>
+                            <p>請至你的E-mail收取驗證碼,並在30分鐘內輸入</p>
+                            <p>(預設為鳳中E-mail: <code>s+學號@fssh.khc.edu.tw</code>)</p>
+                            <div class="form-group">
+                                <label for="verify-InputCode">輸入驗證碼</label>
+                                <input type="text" class="form-control" id="verify-InputCode" placeholder="輸入驗證碼"
+                                       required>
+                            </div>
+                            <div class="row justify-content-end">
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-default btn-primary btn-block"
+                                            style="margin-top: 8px">
+                                        送出
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <form role="form" class="form-signin" id="form-login">
             <h2 class="form-signin-heading" style="margin-bottom: 16px;">系統登入 <a href="index.html"
                                                                                  style="color: black;float: right;margin-right: 15px"><i
@@ -123,13 +156,7 @@
             //todo
             ShowAlart('alert-success', '你已登出!!', false, true);
 
-            /*$.cookie("LoginInfoAcc", '', {expires: -1});
-            $.cookie("LoginInfoPw", '', {expires: -1});
-            $.cookie("LoginInfoName", '', {expires: -1});
-            $.cookie("LoginInfoAdmin", '', {expires: -1});
-            $.cookie("LoginInfoClass", '', {expires: -1});
-
-            $.cookie("AllUserData", '', {expires: -1});*/
+            //$.cookie("LoginInfoAcc", '', {expires: -1});
         }
         if ($.cookie('rm_refresh_token')) {
             $('#InputAcc').val($.cookie('rm_account'));
@@ -156,7 +183,8 @@
                 if(res.data.hasOwnProperty('access_token')){
 
                 }else{
-
+                    $('#modal-verify').modal('show');
+                    return false;
                 }
             }else if (res.code==401){
                 if(res.data.error=='Username or Password Error'){
@@ -191,6 +219,10 @@
                 });
                 return false;
             }
+            return false;
+        });
+        $('#form-verify').submit(function () {
+
             return false;
         });
     });

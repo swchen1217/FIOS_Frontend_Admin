@@ -181,7 +181,7 @@
             console.log(res);
             if(res.code==200){
                 if(res.data.hasOwnProperty('access_token')){
-
+                    return false;
                 }else{
                     $('#modal-verify').modal('show');
                     return false;

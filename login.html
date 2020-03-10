@@ -28,6 +28,8 @@
     <!-- Google Font APIs -->
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC:400&display=swap&subset=chinese-traditional"
           rel="stylesheet">
+    <!-- jwt-decode -->
+    <script src="js/jwt-decode.min.js"></script>
 
     <!-- My CSS -->
     <link rel="stylesheet" href="css/login.css">
@@ -202,12 +204,17 @@
                 console.log(res);
                 if(res.code==200){
                     if(res.data.hasOwnProperty('access_token')){
-
-
-                        //ShowAlart('alert-success', %name% + ',歡迎回來', false, true);
-                        setTimeout(function () {
+                        if ($('#RemMe').prop("checked"))
+                            $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
+                        else
+                            $.cookie('refresh_token', '', {expires: -1});
+                        $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in/3600/24});
+                        var user=jwt_decode(res.data.access_token)['user'];
+                        $.cookie('user', JSON.stringify(user), {expires: res.data.expires_in/3600/24});
+                        ShowAlart('alert-success', user['name'] + ',歡迎回來', false, true);
+                        /*setTimeout(function () {
                             location.replace("./index.html")
-                        }, 1000);
+                        }, 1000);*/
                         return false;
                     }else{
                         $('#modal-verify').modal('show');

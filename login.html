@@ -130,7 +130,7 @@
                             <p>請至你的E-mail收取驗證碼,並在30分鐘內輸入</p>
                             <!--<p>(預設為鳳中E-mail: <code>s+學號@fssh.khc.edu.tw</code>)</p>-->
                             <div class="form-group">
-                                <label for="verify-InputCode">輸入驗證碼</label>
+                                <label for="verify-InputCode">輸入驗證碼(10碼)</label>
                                 <input type="text" class="form-control" id="verify-InputCode" placeholder="輸入驗證碼"
                                        required>
                             </div>
@@ -183,39 +183,117 @@
         }
         $('#form-login').submit(function () {
             HideAlert();
+            if ($.cookie('rm_refresh_token')) {
+                //todo
+            }else{
+                var input_acc = $('#InputAcc').val();
+                var input_pw = $('#InputPw').val();
+                if (input_acc == "" || input_pw == "") {
+                    $.alert({
+                        title: '錯誤',
+                        content: '帳號或密碼未輸入!!請再試一次',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                    return false;
+                }
+                var data={grant_type:'password',client_id:config.client_id,client_secret:config.client_secret,username:input_acc,password:input_pw};
+                var res=request('POST','/oauth/token',data,false);
+                console.log(res);
+                if(res.code==200){
+                    if(res.data.hasOwnProperty('access_token')){
+
+
+                        //ShowAlart('alert-success', %name% + ',歡迎回來', false, true);
+                        setTimeout(function () {
+                            location.replace("./index.html")
+                        }, 1000);
+                        return false;
+                    }else{
+                        $('#modal-verify').modal('show');
+                        return false;
+                    }
+                }else if (res.code==401){
+                    if(res.data.error=='Username or Password Error'){
+                        $.alert({
+                            title: '錯誤',
+                            content: '帳號或密碼錯誤!!請再試一次',
+                            type: 'red',
+                            typeAnimated: true
+                        });
+                    }else if(res.data.error=='invalid_client'){
+                        $.alert({
+                            title: '錯誤',
+                            content: 'Client Error!!請聯繫管理員',
+                            type: 'red',
+                            typeAnimated: true
+                        });
+                    }else {
+                        $.alert({
+                            title: '錯誤',
+                            content: '系統發生錯誤!!請聯繫管理員',
+                            type: 'red',
+                            typeAnimated: true
+                        });
+                    }
+                    return false;
+                }else if (res.code==403){
+                    $.alert({
+                        title: '錯誤',
+                        content: '登入失敗超過5次!!請稍後再試(10分鐘)',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                    return false;
+                }
+            }
+            return false;
+        });
+        $('#form-verify').submit(function () {
             var input_acc = $('#InputAcc').val();
-            var input_pw = $('#InputPw').val();
-            if (input_acc == "" || input_pw == "") {
+            var input_vc=$('#verify-InputCode').val();
+            if(input_acc == ""){
                 $.alert({
                     title: '錯誤',
-                    content: '帳號或密碼未輸入!!請再試一次',
+                    content: '請重新登入,並再試一次',
                     type: 'red',
                     typeAnimated: true
                 });
                 return false;
             }
-            var data={grant_type:'password',client_id:config.client_id,client_secret:config.client_secret,username:input_acc,password:input_pw};
-            var res=request('POST','/oauth/token',data,false);
+            if(input_vc == "" || input_vc.length!=10){
+                $.alert({
+                    title: '錯誤',
+                    content: '未輸入驗證碼,或長度不符合(10碼)',
+                    type: 'red',
+                    typeAnimated: true
+                });
+                return false;
+            }
+            var data={username:input_acc,varify_code:input_vc};
+            var res=request('POST','/oauth/varify',data,false);
             console.log(res);
             if(res.code==200){
-                if(res.data.hasOwnProperty('access_token')){
-                    return false;
-                }else{
-                    $('#modal-verify').modal('show');
-                    return false;
-                }
-            }else if (res.code==401){
-                if(res.data.error=='Username or Password Error'){
+                //todo
+            }else if(res.code==403){
+                if(res.data.error=='Verify code expired'){
                     $.alert({
                         title: '錯誤',
-                        content: '帳號或密碼錯誤!!請再試一次',
+                        content: '驗證碼過期!!請重新登入',
                         type: 'red',
                         typeAnimated: true
                     });
-                }else if(res.data.error=='invalid_client'){
+                }else if(res.data.error=='Verify code error'){
                     $.alert({
                         title: '錯誤',
-                        content: 'Client Error!!請聯繫管理員',
+                        content: '驗證碼錯誤!!請重新輸入',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }else if(res.data.error=='You don’t need to verify'){
+                    $.alert({
+                        title: '錯誤',
+                        content: '你不需要驗證!!請重新登入',
                         type: 'red',
                         typeAnimated: true
                     });
@@ -228,19 +306,14 @@
                     });
                 }
                 return false;
-            }else if (res.code==403){
+            }else if(res.code==404){
                 $.alert({
                     title: '錯誤',
-                    content: '登入失敗超過5次!!請稍後再試(10分鐘)',
+                    content: '帳號錯誤!!請再試一次',
                     type: 'red',
                     typeAnimated: true
                 });
-                return false;
             }
-            return false;
-        });
-        $('#form-verify').submit(function () {
-
             return false;
         });
     });

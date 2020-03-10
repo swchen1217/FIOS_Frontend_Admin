@@ -277,8 +277,8 @@
                 });
                 return false;
             }
-            var data={username:input_acc,varify_code:input_vc};
-            var res=request('POST','/oauth/varify',data,false);
+            var data={username:input_acc,verify_code:input_vc};
+            var res=request('POST','/oauth/verify',data,false);
             console.log(res);
             if(res.code==200){
                 //todo

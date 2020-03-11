@@ -128,7 +128,9 @@
                     </div>
                     <div class="modal-body">
                         <form role="form" class="form-my" id="form-verify">
-                            <h5><i class="fas fa-exclamation-circle" style="color: #d4af2f;padding:0px 5px;margin:0px 5px;font-size: 30px"></i>您的帳號有異常活動行為</h5>
+                            <h5><i class="fas fa-exclamation-circle"
+                                   style="color: #d4af2f;padding:0px 5px;margin:0px 5px;font-size: 30px"></i>您的帳號有異常活動行為
+                            </h5>
                             <p>請至你的E-mail收取驗證碼,並在30分鐘內輸入</p>
                             <!--<p>(預設為鳳中E-mail: <code>s+學號@fssh.khc.edu.tw</code>)</p>-->
                             <div class="form-group">
@@ -171,36 +173,45 @@
 <script>
     var tmp;
     $(document).ready(function () {
-        if ($.cookie('LoginInfoAcc')) {
-            ShowAlart('alert-success', '你已登出!!', false, true);
-            var res=request('DELETE ','/oauth/token',null);
+        if ($.cookie('access_token')) {
+            var jti=jwt_decode($.cookie('access_token'))['jti'];
+            request('DELETE', '/oauth/token/'+jti, null);
             $.cookie("access_token", '', {expires: -1});
+            ShowAlart('alert-success', '你已登出!!', false, true);
         }
         if ($.cookie('refresh_token')) {
-            $('#InputAcc').val($.cookie('rm_account'));
+            $('#InputAcc').val($.cookie('account'));
             $('#InputPw').val("********");
             $('#RemMe').attr('checked', true);
         }
         $('#form-login').submit(function () {
             HideAlert();
             if ($.cookie('refresh_token')) {
-                var data={grant_type:'refresh_token',client_id:config.client_id,client_secret:config.client_secret,refresh_token:$.cookie('refresh_token')};
-                var res=request('POST','/oauth/token',data,false);
-                console.log(res);
-                if(res.code==200){
-                    if ($('#RemMe').prop("checked"))
+                var data = {
+                    grant_type: 'refresh_token',
+                    client_id: config.client_id,
+                    client_secret: config.client_secret,
+                    refresh_token: $.cookie('refresh_token')
+                };
+                var res = request('POST', '/oauth/token', data, false);
+                if (res.code == 200) {
+                    $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in / 3600 / 24});
+                    var user = jwt_decode(res.data.access_token)['user'];
+                    if ($('#RemMe').prop("checked")) {
                         $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
-                    else
+                        $.cookie('account', user['account'], {expires: 1});
+                    } else {
                         $.cookie('refresh_token', '', {expires: -1});
-                    $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in/3600/24});
-                    var user=jwt_decode(res.data.access_token)['user'];
+                        $.cookie('account', '', {expires: -1});
+                    }
                     ShowAlart('alert-success', user['name'] + ',歡迎回來', false, true);
                     setTimeout(function () {
                         location.replace("./index.html")
                     }, 1000);
                     return false;
-                }else {
+                } else {
                     $.cookie('refresh_token', '', {expires: -1});
+                    $.cookie('account', '', {expires: -1});
                     $.alert({
                         title: '錯誤',
                         content: '使用者驗證錯誤!!請重新登入',
@@ -209,7 +220,7 @@
                     });
                     return false;
                 }
-            }else{
+            } else {
                 var input_acc = $('#InputAcc').val();
                 var input_pw = $('#InputPw').val();
                 if (input_acc == "" || input_pw == "") {
@@ -221,42 +232,50 @@
                     });
                     return false;
                 }
-                var data={grant_type:'password',client_id:config.client_id,client_secret:config.client_secret,username:input_acc,password:input_pw};
-                var res=request('POST','/oauth/token',data,false);
-                console.log(res);
-                if(res.code==200){
-                    if(res.data.hasOwnProperty('access_token')){
-                        if ($('#RemMe').prop("checked"))
+                var data = {
+                    grant_type: 'password',
+                    client_id: config.client_id,
+                    client_secret: config.client_secret,
+                    username: input_acc,
+                    password: input_pw
+                };
+                var res = request('POST', '/oauth/token', data, false);
+                if (res.code == 200) {
+                    if (res.data.hasOwnProperty('access_token')) {
+                        $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in / 3600 / 24});
+                        var user = jwt_decode(res.data.access_token)['user'];
+                        if ($('#RemMe').prop("checked")) {
                             $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
-                        else
+                            $.cookie('account', user['account'], {expires: 1});
+                        } else{
                             $.cookie('refresh_token', '', {expires: -1});
-                        $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in/3600/24});
-                        var user=jwt_decode(res.data.access_token)['user'];
+                            $.cookie('account', '', {expires: -1});
+                        }
                         ShowAlart('alert-success', user['name'] + ',歡迎回來', false, true);
                         setTimeout(function () {
                             location.replace("./index.html")
                         }, 1000);
                         return false;
-                    }else{
+                    } else {
                         $('#modal-verify').modal('show');
                         return false;
                     }
-                }else if (res.code==401){
-                    if(res.data.error=='Username or Password Error'){
+                } else if (res.code == 401) {
+                    if (res.data.error == 'Username or Password Error') {
                         $.alert({
                             title: '錯誤',
                             content: '帳號或密碼錯誤!!請再試一次',
                             type: 'red',
                             typeAnimated: true
                         });
-                    }else if(res.data.error=='invalid_client'){
+                    } else if (res.data.error == 'invalid_client') {
                         $.alert({
                             title: '錯誤',
                             content: 'Client Error!!請聯繫管理員',
                             type: 'red',
                             typeAnimated: true
                         });
-                    }else {
+                    } else {
                         $.alert({
                             title: '錯誤',
                             content: '系統發生錯誤!!請聯繫管理員',
@@ -265,7 +284,7 @@
                         });
                     }
                     return false;
-                }else if (res.code==403){
+                } else if (res.code == 403) {
                     $.alert({
                         title: '錯誤',
                         content: '登入失敗超過5次!!請稍後再試(10分鐘)',
@@ -279,8 +298,8 @@
         });
         $('#form-verify').submit(function () {
             var input_acc = $('#InputAcc').val();
-            var input_vc=$('#verify-InputCode').val();
-            if(input_acc == ""){
+            var input_vc = $('#verify-InputCode').val();
+            if (input_acc == "") {
                 $.alert({
                     title: '錯誤',
                     content: '請重新登入,並再試一次',
@@ -289,7 +308,7 @@
                 });
                 return false;
             }
-            if(input_vc == "" || input_vc.length!=10){
+            if (input_vc == "" || input_vc.length != 10) {
                 $.alert({
                     title: '錯誤',
                     content: '未輸入驗證碼,或長度不符合(10碼)',
@@ -298,45 +317,47 @@
                 });
                 return false;
             }
-            var data={username:input_acc,verify_code:input_vc};
-            var res=request('POST','/oauth/verify',data,false);
-            console.log(res);
-            if(res.code==200){
-                if ($('#RemMe').prop("checked"))
+            var data = {username: input_acc, verify_code: input_vc};
+            var res = request('POST', '/oauth/verify', data, false);
+            if (res.code == 200) {
+                if ($('#RemMe').prop("checked")) {
                     $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
-                else
+                    $.cookie('account', user['account'], {expires: 1});
+                } else{
                     $.cookie('refresh_token', '', {expires: -1});
-                $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in/3600/24});
-                var user=jwt_decode(res.data.access_token)['user'];
+                    $.cookie('account', '', {expires: -1});
+                }
+                $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in / 3600 / 24});
+                var user = jwt_decode(res.data.access_token)['user'];
                 $('#modal-verify').modal('hide');
                 ShowAlart('alert-success', user['name'] + ',歡迎回來', false, true);
                 setTimeout(function () {
                     location.replace("./index.html")
                 }, 1000);
                 return false;
-            }else if(res.code==403){
-                if(res.data.error=='Verify code expired'){
+            } else if (res.code == 403) {
+                if (res.data.error == 'Verify code expired') {
                     $.alert({
                         title: '錯誤',
                         content: '驗證碼過期!!請重新登入',
                         type: 'red',
                         typeAnimated: true
                     });
-                }else if(res.data.error=='Verify code error'){
+                } else if (res.data.error == 'Verify code error') {
                     $.alert({
                         title: '錯誤',
                         content: '驗證碼錯誤!!請重新輸入',
                         type: 'red',
                         typeAnimated: true
                     });
-                }else if(res.data.error=='You don’t need to verify'){
+                } else if (res.data.error == 'You don’t need to verify') {
                     $.alert({
                         title: '錯誤',
                         content: '你不需要驗證!!請重新登入',
                         type: 'red',
                         typeAnimated: true
                     });
-                }else {
+                } else {
                     $.alert({
                         title: '錯誤',
                         content: '系統發生錯誤!!請聯繫管理員',
@@ -345,7 +366,7 @@
                     });
                 }
                 return false;
-            }else if(res.code==404){
+            } else if (res.code == 404) {
                 $.alert({
                     title: '錯誤',
                     content: '帳號錯誤!!請再試一次',

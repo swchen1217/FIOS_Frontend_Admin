@@ -31,6 +31,7 @@ function request(httpMethod, route, dataObj, auth = true) {
             typeAnimated: true
         });
     }
+    console.log(responses);
     var result={'code': responses.status, 'data': responses.responseJSON};
     console.log(result);
     return result;

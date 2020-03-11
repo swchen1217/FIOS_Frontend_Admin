@@ -1,4 +1,11 @@
+var user;
 function init() {
+    if($.cookie('access_token')!=undefined){
+        user=jwt_decode($.cookie('access_token'))['user'];
+        $('#btn_login').text(user['name'] + "/登出");
+    }else
+        $('#btn_login').text("登入");
+
     PermissionStr = ["班級使用者", "管理員"];
 
     $('#table_clubList').bootstrapTable({

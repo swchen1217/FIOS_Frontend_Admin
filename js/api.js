@@ -1,13 +1,15 @@
-function request(httpMethod, route, dataObj, auth = true, headers = null) {
-    if (auth)
-        headers.Authorization = 'Bearer ' + $.cookie('access_token');
+function request(httpMethod, route, dataObj, auth = true) {
+
     var responses = null;
     $.ajax({
         url: config['backend_URL'] + route,
         data: JSON.stringify(dataObj),
         type: httpMethod,
         contentType: 'application/json; charset=UTF-8',
-        headers: headers,
+        beforeSend: function (xhr) {
+            if (auth && $.cookie('access_token') != undefined)
+                xhr.setRequestHeader("Authorization", 'Bearer ' + $.cookie('access_token'));
+        },
         async: false,
         complete: function (xhr) {
             responses = xhr;
@@ -21,7 +23,7 @@ function request(httpMethod, route, dataObj, auth = true, headers = null) {
             typeAnimated: true
         });
     }
-    if (responses.status == 401 && !(httpMethod == 'POST' && route == '/oauth/token')) {
+    if (responses.status == 401 && !(httpMethod == 'POST' && route == '/oauth/token') && !(httpMethod == 'DELETE' && route.match('/oauth/token/')!=null)) {
         $.alert({
             title: '錯誤',
             content: '使用者驗證錯誤!!請重新登入',
@@ -29,5 +31,7 @@ function request(httpMethod, route, dataObj, auth = true, headers = null) {
             typeAnimated: true
         });
     }
-    return {'code': responses.status, 'data': responses.responseJSON};
+    var result={'code': responses.status, 'data': responses.responseJSON};
+    console.log(result);
+    return result;
 }

@@ -1221,6 +1221,8 @@
             $('#btn_login').text("登入");
         else
             $('#btn_login').text($.cookie('LoginInfoName') + "/登出");
+        if($.cookie('user')!=undefined)
+            var user=JSON.parse(decodeURI($.cookie('user')));
 
         window.addEventListener('hashchange', OnHashchangeListener);
 

@@ -172,21 +172,43 @@
     var tmp;
     $(document).ready(function () {
         if ($.cookie('LoginInfoAcc')) {
-
-            //todo
             ShowAlart('alert-success', '你已登出!!', false, true);
-
-            //$.cookie("LoginInfoAcc", '', {expires: -1});
+            var res=request('DELETE ','/oauth/token',null);
+            $.cookie("access_token", '', {expires: -1});
         }
-        if ($.cookie('rm_refresh_token')) {
+        if ($.cookie('refresh_token')) {
             $('#InputAcc').val($.cookie('rm_account'));
             $('#InputPw').val("********");
             $('#RemMe').attr('checked', true);
         }
         $('#form-login').submit(function () {
             HideAlert();
-            if ($.cookie('rm_refresh_token')) {
-                //todo
+            if ($.cookie('refresh_token')) {
+                var data={grant_type:'refresh_token',client_id:config.client_id,client_secret:config.client_secret,refresh_token:$.cookie('refresh_token')};
+                var res=request('POST','/oauth/token',data,false);
+                console.log(res);
+                if(res.code==200){
+                    if ($('#RemMe').prop("checked"))
+                        $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
+                    else
+                        $.cookie('refresh_token', '', {expires: -1});
+                    $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in/3600/24});
+                    var user=jwt_decode(res.data.access_token)['user'];
+                    ShowAlart('alert-success', user['name'] + ',歡迎回來', false, true);
+                    setTimeout(function () {
+                        location.replace("./index.html")
+                    }, 1000);
+                    return false;
+                }else {
+                    $.cookie('refresh_token', '', {expires: -1});
+                    $.alert({
+                        title: '錯誤',
+                        content: '使用者驗證錯誤!!請重新登入',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                    return false;
+                }
             }else{
                 var input_acc = $('#InputAcc').val();
                 var input_pw = $('#InputPw').val();
@@ -210,11 +232,10 @@
                             $.cookie('refresh_token', '', {expires: -1});
                         $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in/3600/24});
                         var user=jwt_decode(res.data.access_token)['user'];
-                        $.cookie('user', JSON.stringify(user), {expires: res.data.expires_in/3600/24});
                         ShowAlart('alert-success', user['name'] + ',歡迎回來', false, true);
-                        /*setTimeout(function () {
+                        setTimeout(function () {
                             location.replace("./index.html")
-                        }, 1000);*/
+                        }, 1000);
                         return false;
                     }else{
                         $('#modal-verify').modal('show');
@@ -281,7 +302,18 @@
             var res=request('POST','/oauth/verify',data,false);
             console.log(res);
             if(res.code==200){
-                //todo
+                if ($('#RemMe').prop("checked"))
+                    $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
+                else
+                    $.cookie('refresh_token', '', {expires: -1});
+                $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in/3600/24});
+                var user=jwt_decode(res.data.access_token)['user'];
+                $('#modal-verify').modal('hide');
+                ShowAlart('alert-success', user['name'] + ',歡迎回來', false, true);
+                setTimeout(function () {
+                    location.replace("./index.html")
+                }, 1000);
+                return false;
             }else if(res.code==403){
                 if(res.data.error=='Verify code expired'){
                     $.alert({

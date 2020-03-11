@@ -174,8 +174,15 @@
     var tmp;
     $(document).ready(function () {
         if ($.cookie('access_token')) {
-            var jti=jwt_decode($.cookie('access_token'))['jti'];
-            request('DELETE', '/oauth/token/'+jti, null);
+            var jti = jwt_decode($.cookie('access_token'))['jti'];
+            var body;
+            if ($.cookie('refresh_token'))
+                body = {
+                    "rememberme": true
+                };
+            else
+                body = null;
+            request('DELETE', '/oauth/token/' + jti, body);
             $.cookie("access_token", '', {expires: -1});
             ShowAlart('alert-success', '你已登出!!', false, true);
         }
@@ -197,6 +204,7 @@
                 if (res.code == 200) {
                     $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in / 3600 / 24});
                     var user = jwt_decode(res.data.access_token)['user'];
+                    console.log(user);
                     if ($('#RemMe').prop("checked")) {
                         $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
                         $.cookie('account', user['account'], {expires: 1});
@@ -212,6 +220,8 @@
                 } else {
                     $.cookie('refresh_token', '', {expires: -1});
                     $.cookie('account', '', {expires: -1});
+                    $('#InputAcc').val('');
+                    $('#InputPw').val('');
                     $.alert({
                         title: '錯誤',
                         content: '使用者驗證錯誤!!請重新登入',
@@ -247,7 +257,7 @@
                         if ($('#RemMe').prop("checked")) {
                             $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
                             $.cookie('account', user['account'], {expires: 1});
-                        } else{
+                        } else {
                             $.cookie('refresh_token', '', {expires: -1});
                             $.cookie('account', '', {expires: -1});
                         }
@@ -323,7 +333,7 @@
                 if ($('#RemMe').prop("checked")) {
                     $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
                     $.cookie('account', user['account'], {expires: 1});
-                } else{
+                } else {
                     $.cookie('refresh_token', '', {expires: -1});
                     $.cookie('account', '', {expires: -1});
                 }

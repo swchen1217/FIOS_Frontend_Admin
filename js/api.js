@@ -14,10 +14,10 @@ function request(httpMethod, route, dataObj, auth = true, progressBar = true) {
         type: httpMethod,
         contentType: 'application/json; charset=UTF-8',
         beforeSend: function (xhr) {
-            if (auth && $.cookie('access_token') != undefined)
-                xhr.setRequestHeader("Authorization", 'Bearer ' + $.cookie('access_token'));
             if (progressBar)
                 pb.open();
+            if (auth && $.cookie('access_token') != undefined)
+                xhr.setRequestHeader("Authorization", 'Bearer ' + $.cookie('access_token'));
         },
         async: false,
         complete: function (xhr) {

@@ -1,5 +1,12 @@
-function request(httpMethod, route, dataObj, auth = true, progressBar = true) {
+var pb = $.dialog({
+    title: '資料同步中',
+    content: '<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"style="width: 100%"></div></div>',
+    closeIcon: false,
+    columnClass: 'medium',
+    lazyOpen: true,
+});
 
+function request(httpMethod, route, dataObj, auth = true, progressBar = true) {
     var responses = null;
     $.ajax({
         url: config['backend_URL'] + route,
@@ -9,14 +16,14 @@ function request(httpMethod, route, dataObj, auth = true, progressBar = true) {
         beforeSend: function (xhr) {
             if (auth && $.cookie('access_token') != undefined)
                 xhr.setRequestHeader("Authorization", 'Bearer ' + $.cookie('access_token'));
-            if(progressBar)
-                $('#modal-progressBar').modal('show');
+            if (progressBar)
+                pb.open();
         },
         async: false,
         complete: function (xhr) {
             responses = xhr;
-            if(progressBar)
-                $('#modal-progressBar').modal('hide');
+            if (progressBar)
+                pb.close();
         }
     });
     if (Math.floor(responses.status / 100) == 5) {

@@ -1,4 +1,4 @@
-function request(httpMethod, route, dataObj, auth = true) {
+function request(httpMethod, route, dataObj, auth = true, progressBar = true) {
 
     var responses = null;
     $.ajax({
@@ -9,10 +9,14 @@ function request(httpMethod, route, dataObj, auth = true) {
         beforeSend: function (xhr) {
             if (auth && $.cookie('access_token') != undefined)
                 xhr.setRequestHeader("Authorization", 'Bearer ' + $.cookie('access_token'));
+            if(progressBar)
+                $('#modal-progressBar').modal('show');
         },
         async: false,
         complete: function (xhr) {
             responses = xhr;
+            if(progressBar)
+                $('#modal-progressBar').modal('hide');
         }
     });
     if (Math.floor(responses.status / 100) == 5) {
@@ -23,7 +27,7 @@ function request(httpMethod, route, dataObj, auth = true) {
             typeAnimated: true
         });
     }
-    if (responses.status == 401 && !(httpMethod == 'POST' && route == '/oauth/token') && !(httpMethod == 'DELETE' && route.match('/oauth/token/')!=null)) {
+    if (responses.status == 401 && !(httpMethod == 'POST' && route == '/oauth/token') && !(httpMethod == 'DELETE' && route.match('/oauth/token/') != null)) {
         $.alert({
             title: '錯誤',
             content: '使用者驗證錯誤!!請重新登入',
@@ -32,7 +36,7 @@ function request(httpMethod, route, dataObj, auth = true) {
         });
     }
     console.log(responses);
-    var result={'code': responses.status, 'data': responses.responseJSON};
+    var result = {'code': responses.status, 'data': responses.responseJSON};
     console.log(result);
     return result;
 }

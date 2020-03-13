@@ -167,6 +167,7 @@
             <input type="checkbox" value="" id="RemMe" style="width: 20px;height: 20px;margin-left: 18px"><span
                 style="font-size: 20px">記住我</span>
             <button type="submit" class="btn btn-default btn-primary btn-block" style="margin-top: 8px">登入</button>
+            <button type="button" class="btn btn-default btn-outline-primary btn-block" style="margin-top: 8px">使用 <span id="rm_account">000000</span> 登入</button>
         </form>
     </div>
 </div>
@@ -193,18 +194,29 @@
         }
         $('#form-login').submit(function () {
             HideAlert();
-            if ($.cookie('refresh_token')) {
-                var data = {
-                    grant_type: 'refresh_token',
-                    client_id: config.client_id,
-                    client_secret: config.client_secret,
-                    refresh_token: $.cookie('refresh_token')
-                };
-                var res = request('POST', '/oauth/token', data, false);
-                if (res.code == 200) {
+            var input_acc = $('#InputAcc').val();
+            var input_pw = $('#InputPw').val();
+            if (input_acc == "" || input_pw == "") {
+                $.alert({
+                    title: '錯誤',
+                    content: '帳號或密碼未輸入!!請再試一次',
+                    type: 'red',
+                    typeAnimated: true
+                });
+                return false;
+            }
+            var data = {
+                grant_type: 'password',
+                client_id: config.client_id,
+                client_secret: config.client_secret,
+                username: input_acc,
+                password: input_pw
+            };
+            var res = request('POST', '/oauth/token', data, false);
+            if (res.code == 200) {
+                if (res.data.hasOwnProperty('access_token')) {
                     $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in / 3600 / 24});
                     var user = jwt_decode(res.data.access_token)['user'];
-                    console.log(user);
                     if ($('#RemMe').prop("checked")) {
                         $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
                         $.cookie('account', user['account'], {expires: 1});
@@ -218,91 +230,41 @@
                     }, 1000);
                     return false;
                 } else {
-                    $.cookie('refresh_token', '', {expires: -1});
-                    $.cookie('account', '', {expires: -1});
-                    $('#InputAcc').val('');
-                    $('#InputPw').val('');
+                    $('#modal-verify').modal('show');
+                    return false;
+                }
+            } else if (res.code == 401) {
+                if (res.data.error == 'Username or Password Error') {
                     $.alert({
                         title: '錯誤',
-                        content: '使用者驗證錯誤!!請重新登入',
+                        content: '帳號或密碼錯誤!!請再試一次',
                         type: 'red',
                         typeAnimated: true
                     });
-                    return false;
-                }
-            } else {
-                var input_acc = $('#InputAcc').val();
-                var input_pw = $('#InputPw').val();
-                if (input_acc == "" || input_pw == "") {
+                } else if (res.data.error == 'invalid_client') {
                     $.alert({
                         title: '錯誤',
-                        content: '帳號或密碼未輸入!!請再試一次',
+                        content: 'Client Error!!請聯繫管理員',
                         type: 'red',
                         typeAnimated: true
                     });
-                    return false;
-                }
-                var data = {
-                    grant_type: 'password',
-                    client_id: config.client_id,
-                    client_secret: config.client_secret,
-                    username: input_acc,
-                    password: input_pw
-                };
-                var res = request('POST', '/oauth/token', data, false);
-                if (res.code == 200) {
-                    if (res.data.hasOwnProperty('access_token')) {
-                        $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in / 3600 / 24});
-                        var user = jwt_decode(res.data.access_token)['user'];
-                        if ($('#RemMe').prop("checked")) {
-                            $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
-                            $.cookie('account', user['account'], {expires: 1});
-                        } else {
-                            $.cookie('refresh_token', '', {expires: -1});
-                            $.cookie('account', '', {expires: -1});
-                        }
-                        ShowAlart('alert-success', user['name'] + ',歡迎回來', false, true);
-                        setTimeout(function () {
-                            location.replace("./index.html")
-                        }, 1000);
-                        return false;
-                    } else {
-                        $('#modal-verify').modal('show');
-                        return false;
-                    }
-                } else if (res.code == 401) {
-                    if (res.data.error == 'Username or Password Error') {
-                        $.alert({
-                            title: '錯誤',
-                            content: '帳號或密碼錯誤!!請再試一次',
-                            type: 'red',
-                            typeAnimated: true
-                        });
-                    } else if (res.data.error == 'invalid_client') {
-                        $.alert({
-                            title: '錯誤',
-                            content: 'Client Error!!請聯繫管理員',
-                            type: 'red',
-                            typeAnimated: true
-                        });
-                    } else {
-                        $.alert({
-                            title: '錯誤',
-                            content: '系統發生錯誤!!請聯繫管理員',
-                            type: 'red',
-                            typeAnimated: true
-                        });
-                    }
-                    return false;
-                } else if (res.code == 403) {
+                } else {
                     $.alert({
                         title: '錯誤',
-                        content: '登入失敗超過5次!!請稍後再試(10分鐘)',
+                        content: '系統發生錯誤!!請聯繫管理員',
                         type: 'red',
                         typeAnimated: true
                     });
-                    return false;
                 }
+                return false;
+            } else if (res.code == 403) {
+                $.alert({
+                    title: '錯誤',
+                    content: '登入失敗超過5次!!請稍後再試(10分鐘)',
+                    type: 'red',
+                    typeAnimated: true
+                });
+                return false;
             }
             return false;
         });
@@ -385,6 +347,44 @@
                 });
             }
             return false;
+        });
+        $('#btn_chguser-del').click(function () {
+            var data = {
+                grant_type: 'refresh_token',
+                client_id: config.client_id,
+                client_secret: config.client_secret,
+                refresh_token: $.cookie('refresh_token')
+            };
+            var res = request('POST', '/oauth/token', data, false);
+            if (res.code == 200) {
+                $.cookie('access_token', res.data.access_token, {expires: res.data.expires_in / 3600 / 24});
+                var user = jwt_decode(res.data.access_token)['user'];
+                console.log(user);
+                if ($('#RemMe').prop("checked")) {
+                    $.cookie('refresh_token', res.data.refresh_token, {expires: 1});
+                    $.cookie('account', user['account'], {expires: 1});
+                } else {
+                    $.cookie('refresh_token', '', {expires: -1});
+                    $.cookie('account', '', {expires: -1});
+                }
+                ShowAlart('alert-success', user['name'] + ',歡迎回來', false, true);
+                setTimeout(function () {
+                    location.replace("./index.html")
+                }, 1000);
+                return false;
+            } else {
+                $.cookie('refresh_token', '', {expires: -1});
+                $.cookie('account', '', {expires: -1});
+                $('#InputAcc').val('');
+                $('#InputPw').val('');
+                $.alert({
+                    title: '錯誤',
+                    content: '使用者驗證錯誤!!請重新登入',
+                    type: 'red',
+                    typeAnimated: true
+                });
+                return false;
+            }
         });
     });
 </script>

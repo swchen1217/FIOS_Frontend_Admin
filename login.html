@@ -167,7 +167,10 @@
             <input type="checkbox" value="" id="RemMe" style="width: 20px;height: 20px;margin-left: 18px"><span
                 style="font-size: 20px">記住我</span>
             <button type="submit" class="btn btn-default btn-primary btn-block" style="margin-top: 8px">登入</button>
-            <button type="button" class="btn btn-default btn-outline-primary btn-block" style="margin-top: 8px">使用 <span id="rm_account">000000</span> 登入</button>
+            <button type="button" class="btn btn-default btn-outline-primary btn-block" style="margin-top: 8px"
+                    id="btn_rm_login">使用 <span
+                    id="rm_account">000000</span> 登入
+            </button>
         </form>
     </div>
 </div>
@@ -179,7 +182,7 @@
             var body;
             if ($.cookie('refresh_token'))
                 body = {
-                    "rememberme": true
+                    rememberme: true
                 };
             else
                 body = null;
@@ -188,10 +191,13 @@
             ShowAlart('alert-success', '你已登出!!', false, true);
         }
         if ($.cookie('refresh_token')) {
-            $('#InputAcc').val($.cookie('account'));
-            $('#InputPw').val("********");
+            //$('#InputAcc').val($.cookie('account'));
+            //$('#InputPw').val("********");
             $('#RemMe').attr('checked', true);
-        }
+            $('#btn_rm_login').show();
+            $('#rm_account').text($.cookie('account'));
+        } else
+            $('#btn_rm_login').hide();
         $('#form-login').submit(function () {
             HideAlert();
             var input_acc = $('#InputAcc').val();
@@ -348,7 +354,7 @@
             }
             return false;
         });
-        $('#btn_chguser-del').click(function () {
+        $('#btn_rm_login').click(function () {
             var data = {
                 grant_type: 'refresh_token',
                 client_id: config.client_id,

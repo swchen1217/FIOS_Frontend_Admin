@@ -10,7 +10,7 @@ $.ajax({
         console.log('ajax er');
         $.alert({
             title: '錯誤',
-            content: 'Ajax 發生錯誤',
+            content: 'Ajax 發生錯誤 (config)',
             type: 'red',
             typeAnimated: true
         });

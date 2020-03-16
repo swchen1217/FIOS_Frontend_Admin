@@ -42,6 +42,20 @@ function request(httpMethod, route, dataObj, auth = true, progressBar = true) {
             typeAnimated: true
         });
     }
+    if (responses.status == 403 &&
+        !(httpMethod == 'POST' && route == '/oauth/token') &&
+        !(httpMethod == 'POST' && route == '/oauth/verify') &&
+        !(httpMethod == 'POST' && route == '/pswd/account') &&
+        !(httpMethod == 'POST' && route == '/pswd/token') &&
+        !(httpMethod == 'POST' && route == '/order')
+    ) {
+        $.alert({
+            title: '錯誤',
+            content: '使用者驗證錯誤!!請重新登入',
+            type: 'red',
+            typeAnimated: true
+        });
+    }
     console.log(responses);
     var result = {'code': responses.status, 'data': responses.responseJSON};
     console.log(result);

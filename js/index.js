@@ -8,7 +8,8 @@ function init() {
         $('#btn_login').text("登入");
 
     PermissionStr = [];
-    $('#table_').bootstrapTable({
+
+    $('#table_dish').bootstrapTable({
         dataType: "json",
         classes: "table table-bordered table-striped table-sm",
         striped: true,
@@ -19,25 +20,36 @@ function init() {
         pageSize: 5,
         search: true,
         showPaginationSwitch: true,
+        detailView:true,
         columns: [{
             field: 'id',
-            title: '代碼',
+            title: 'ID',
             //formatter: LinkFormatterCM
         }, {
             field: 'name',
             title: '名稱'
         }, {
-            field: 'teacher',
-            title: '教師'
+            field: 'manufacturer_name',
+            title: '供應商'
         }, {
-            field: 'grade',
-            title: '年級'
+            field: 'price',
+            title: '售價'
         }, {
-            field: 'isSpecial',
-            title: '特殊社團'
+            field: 'rating',
+            title: '評分'
         }, {
-            field: 'maxPeople',
-            title: '人數限制'
+            field: 'ratiupdated_atng',
+            title: '修改時間'
+        }, {
+            field: 'photo_show',
+            title: '圖片',
+            width: 70,
+            formatter: '<button id="btn_show_photo" class="btn btn-info">圖片</button>'
+        }, {
+            field: 'sale',
+            title: '販售',
+            width: 70,
+            formatter: '<button id="btn_sale" class="btn btn-primary">販售</button>',
         }]
     });
 }
@@ -58,6 +70,8 @@ function OnHashchangeListener() {
     if (hash == '#DishManage' && login_check() && PermissionCheck(false, true)) {
         $('#Content_DishManage').show();
         $("#title_bar").hide();
+
+        $('#table_dish').bootstrapTable('load', getDishList());
     }
     if (hash == '#SaleManage' && login_check() && PermissionCheck(false, true)) {
         $('#Content_SaleManage').show();
@@ -153,4 +167,17 @@ function ButtonOnClickListener() {
     $('#btn_').click(function () {
 
     });
+}
+
+function getDishList() {
+    var res = request('GET','/dish');
+    if(res.code==404){
+        $.alert({
+            title: '錯誤',
+            content: '找不到!!',
+            type: 'red',
+            typeAnimated: true
+        });
+    }
+    return res.data;
 }

@@ -51,7 +51,7 @@ function request(httpMethod, route, dataObj, auth = true, progressBar = true) {
     ) {
         $.alert({
             title: '錯誤',
-            content: '使用者驗證錯誤!!請重新登入',
+            content: '權限不足!!!',
             type: 'red',
             typeAnimated: true
         });

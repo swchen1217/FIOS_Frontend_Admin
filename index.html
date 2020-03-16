@@ -40,6 +40,8 @@
     <!-- My js -->
     <script src="js/alert.js"></script>
     <script src="js/index.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
 </head>
 <body>
 <div class="jumbotron text-center" id="title_bar" style="margin:0;padding: 0px;background-color: #FFFFFF">
@@ -142,7 +144,11 @@
         Home
     </div>
     <div id="Content_DishManage">
-        Dish
+        <div class="row" id="row-dish-list">
+            <div class="container">
+                <table id="table_dish"></table>
+            </div>
+        </div>
     </div>
     <div id="Content_SaleManage">
         Sale

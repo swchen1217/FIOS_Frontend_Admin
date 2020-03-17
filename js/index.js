@@ -82,6 +82,89 @@ function init() {
             formatter: '<button id="btn_sale" class="btn btn-primary">販售</button>',
         }]
     });
+
+    $('#table_order').bootstrapTable({
+        dataType: "json",
+        classes: "table table-bordered table-striped table-sm",
+        striped: true,
+        pagination: true,
+        sortable: true,
+        uniqueId: 'order_id',
+        sortName: 'order_id',
+        pageNumber: 1,
+        pageSize: 5,
+        search: true,
+        showPaginationSwitch: true,
+        //detailView: true,
+        //detailFormatter: function (index, row) {
+            /*console.log(row);
+            var html =
+                '<div class="row" style="margin: 0px;padding: 0px 55px">' +
+                '<div class="col-6">' +
+                '<p><b>熱量: </b>' + row['calories'] + ' Kcal</p>' +
+                '<p><b>蛋白質: </b>' + row['protein'] + ' g</p>' +
+                '<p><b>脂肪: </b>' + row['fat'] + ' g</p>' +
+                '<p><b>碳水化合物: </b>' + row['carbohydrate'] + ' g</p>' +
+                '</div>';
+            if (row['contents'].length != 0) {
+                html +=
+                    '<div class="col-6">' +
+                    '<b>內容物: </b>' +
+                    '<ul>';
+                for (var i = 0; i < row['contents'].length; i++)
+                    html += '<li>' + row['contents'][i] + '</li>';
+                html += '</ul>';
+            }
+            html += '</div>';
+            return html;*/
+        //},
+        columns: [{
+            field: 'order_id',
+            title: 'ID',
+            //formatter: LinkFormatterCM
+        }, {
+            field: 'user.class',
+            title: '班級'
+        }, {
+            field: 'user.account',
+            title: '學號'
+        }, {
+            field: 'sale.dish.manufacturer_name',
+            title: '供應商'
+        }, {
+            field: 'sale.dish.name',
+            title: '名稱'
+        }, {
+            field: 'sale.dish.price',
+            title: '售價'
+        }, {
+            field: 'sale.sale_at',
+            title: '日期'
+        }/*, {
+            field: 'rating',
+            title: '評分',
+            formatter: function (data) {
+                if (data != -1)
+                    return data;
+                else
+                    return '-';
+            },
+        }, {
+            field: 'updated_at',
+            title: '修改時間'
+        }, {
+            field: 'photo_show',
+            title: '圖片',
+            width: 70,
+            formatter: '<button id="btn_show_photo" class="btn btn-info">圖片</button>',
+            events: operateEvents
+        }, {
+            field: 'sale',
+            title: '販售',
+            width: 70,
+            formatter: '<button id="btn_sale" class="btn btn-primary">販售</button>',
+        }*/]
+    });
 }
 
 function OnHashchangeListener() {
@@ -112,6 +195,10 @@ function OnHashchangeListener() {
     if (hash == '#OrderManage' && login_check() && PermissionCheck(true, true)) {
         $('#Content_OrderManage').show();
         $("#title_bar").hide();
+
+        getOrderList().then(data => {
+            $('#table_order').bootstrapTable('load', data);
+        });
     }
     if (hash == '#BalanceManage' && login_check() && PermissionCheck(true, true)) {
         $('#Content_BalanceManage').show();
@@ -205,6 +292,19 @@ function ButtonOnClickListener() {
 
 async function getDishList() {
     var res = request('GET', '/dish');
+    if (res.code == 404) {
+        $.alert({
+            title: '錯誤',
+            content: '找不到!!',
+            type: 'red',
+            typeAnimated: true
+        });
+    }
+    return res.data;
+}
+
+async function getOrderList() {
+    var res = request('GET', '/order');
     if (res.code == 404) {
         $.alert({
             title: '錯誤',

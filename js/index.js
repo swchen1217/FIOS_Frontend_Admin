@@ -373,7 +373,7 @@ function FormSubmitListener() {
         return false;
     });
     $('#form-Chgpw').submit(function () {
-        HideAlert();
+        /*HideAlert();
         var npw = $('#InputNewPw_f').val();
         var npwr = $('#InputNewPwRe_f').val();
         if (npw == "" || npwr == "") {
@@ -430,7 +430,7 @@ function FormSubmitListener() {
             }
         }
         return false;
-    });
+    });*/
     $('#form-GetToken').submit(function () {
         HideAlert();
         var email = $('#InputEmail').val();

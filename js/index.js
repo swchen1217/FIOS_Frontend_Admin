@@ -14,6 +14,7 @@ function init() {
         classes: "table table-bordered table-striped table-sm",
         striped: true,
         pagination: true,
+        sortable: true,
         uniqueId: 'id',
         sortName: 'id',
         pageNumber: 1,
@@ -72,7 +73,8 @@ function init() {
             field: 'photo_show',
             title: '圖片',
             width: 70,
-            formatter: '<button id="btn_show_photo" class="btn btn-info">圖片</button>'
+            formatter: '<button id="btn_show_photo" class="btn btn-info">圖片</button>',
+            events: operateEvents
         }, {
             field: 'sale',
             title: '販售',
@@ -181,8 +183,10 @@ window.operateEvents = {
     // value  undefined
     // row    rowdata
     // index  row
-    'click #btn_': function (e, value, row, index) {
-
+    'click #btn_show_photo': function (e, value, row, index) {
+        console.log(row['photo']);
+        $('#img-show_dish_photo').prop('src',row['photo']);
+        $('#modal-show_dish_photo').modal('show');
     }
 };
 

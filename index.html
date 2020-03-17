@@ -374,21 +374,21 @@
 <script>
     $(document).ready(function () {
         init();
-        OnHashchangeListener();
+
         $("#mNav .nav a").on("click", function () {
             $("#mNav .nav").find(".active").removeClass("active");
             $(this).parent().addClass("active");
             $("#navbarToggler").collapse('hide');
         });
-
-        window.addEventListener('hashchange', OnHashchangeListener);
-
-        FormSubmitListener();
-        ButtonOnClickListener();
-
         $(".custom-file-input").change(function () {
             $(this).next(".custom-file-label").html($(this).val().split("\\").pop());
         });
+
+        OnHashchangeListener();
+
+        window.addEventListener('hashchange', OnHashchangeListener);
+        FormSubmitListener();
+        ButtonOnClickListener();
     });
 </script>
 </html>

@@ -24,7 +24,7 @@ function init() {
         detailFormatter: function (index, row) {
             console.log(row);
             var html =
-                '<div class="row" style="margin-left: 55px">' +
+                '<div class="row" style="margin: 0px;padding: 0px 55px">' +
                 '<div class="col-6">' +
                 '<p><b>熱量: </b>' + row['calories'] + ' Kcal</p>' +
                 '<p><b>蛋白質: </b>' + row['protein'] + ' g</p>' +

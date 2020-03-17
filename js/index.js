@@ -322,6 +322,9 @@ function FormSubmitListener() {
             var res = request('POST', '/pswd/token', data, false);
             if (res.code == 204) {
                 ShowAlart('alert-success', '更改成功!!!', false, true);
+                setTimeout(function () {
+                    location.replace("./index.html#ChangePW");
+                }, 2000);
             }
             if (res.code == 403) {
                 if (res.data['error'] == 'Verify code expired') {
@@ -370,7 +373,62 @@ function FormSubmitListener() {
         return false;
     });
     $('#form-Chgpw').submit(function () {
-
+        HideAlert();
+        var npw = $('#InputNewPw_f').val();
+        var npwr = $('#InputNewPwRe_f').val();
+        if (npw == "" || npwr == "") {
+            $.alert({
+                title: '錯誤',
+                content: '新密碼或確認新密碼未輸入!!請再試一次',
+                type: 'red',
+                typeAnimated: true
+            });
+        } else if (npw != npwr) {
+            $('#InputNewPw_f').val('');
+            $('#InputNewPwRe_f').val('');
+            $.alert({
+                title: '錯誤',
+                content: '確認新密碼不符合!!請再試一次',
+                type: 'red',
+                typeAnimated: true
+            });
+        } else {
+            $('#InputNewPw_f').val('');
+            $('#InputNewPwRe_f').val('');
+            var data = {email: email, redirect: 'AdminFrontend'};
+            var res = request('POST', '/pswd/forget', data, false);
+            if (res.code == 204) {
+                ShowAlart('alert-success', '已寄出!!!', false, true);
+            }
+            if (res.code == 400) {
+                if (res.data['error'] == 'Email format error') {
+                    $.alert({
+                        title: '錯誤',
+                        content: 'Email格式錯誤!!請重新輸入',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }
+            }
+            if (res.code == 404) {
+                if (res.data['error'] == 'The User Not Found') {
+                    $.alert({
+                        title: '錯誤',
+                        content: '使用者尚未註冊',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }
+                if (res.data['error'] == 'The Redirect Not Found') {
+                    $.alert({
+                        title: '錯誤',
+                        content: 'Redirect錯誤!!請聯繫管理員',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }
+            }
+        }
         return false;
     });
     $('#form-GetToken').submit(function () {

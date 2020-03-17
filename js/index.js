@@ -428,9 +428,9 @@ function FormSubmitListener() {
                     });
                 }
             }
-        }
+        }*/
         return false;
-    });*/
+    });
     $('#form-GetToken').submit(function () {
         HideAlert();
         var email = $('#InputEmail').val();

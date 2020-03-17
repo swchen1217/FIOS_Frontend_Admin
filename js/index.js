@@ -97,26 +97,26 @@ function init() {
         showPaginationSwitch: true,
         //detailView: true,
         //detailFormatter: function (index, row) {
-            /*console.log(row);
-            var html =
-                '<div class="row" style="margin: 0px;padding: 0px 55px">' +
+        /*console.log(row);
+        var html =
+            '<div class="row" style="margin: 0px;padding: 0px 55px">' +
+            '<div class="col-6">' +
+            '<p><b>熱量: </b>' + row['calories'] + ' Kcal</p>' +
+            '<p><b>蛋白質: </b>' + row['protein'] + ' g</p>' +
+            '<p><b>脂肪: </b>' + row['fat'] + ' g</p>' +
+            '<p><b>碳水化合物: </b>' + row['carbohydrate'] + ' g</p>' +
+            '</div>';
+        if (row['contents'].length != 0) {
+            html +=
                 '<div class="col-6">' +
-                '<p><b>熱量: </b>' + row['calories'] + ' Kcal</p>' +
-                '<p><b>蛋白質: </b>' + row['protein'] + ' g</p>' +
-                '<p><b>脂肪: </b>' + row['fat'] + ' g</p>' +
-                '<p><b>碳水化合物: </b>' + row['carbohydrate'] + ' g</p>' +
-                '</div>';
-            if (row['contents'].length != 0) {
-                html +=
-                    '<div class="col-6">' +
-                    '<b>內容物: </b>' +
-                    '<ul>';
-                for (var i = 0; i < row['contents'].length; i++)
-                    html += '<li>' + row['contents'][i] + '</li>';
-                html += '</ul>';
-            }
-            html += '</div>';
-            return html;*/
+                '<b>內容物: </b>' +
+                '<ul>';
+            for (var i = 0; i < row['contents'].length; i++)
+                html += '<li>' + row['contents'][i] + '</li>';
+            html += '</ul>';
+        }
+        html += '</div>';
+        return html;*/
         //},
         columns: [{
             field: 'order_id',
@@ -237,6 +237,17 @@ function OnHashchangeListener() {
     }
     if (hash == '#ChangePW') {
         $('#Content_ChangePW').show();
+        var getURl = new URL(location.href);
+        var token = getURl.searchParams.get('token');
+        if (getURl.searchParams.has('token')) {
+            $('#row-fgtpw').show();
+            $('#row-chgpw').hide();
+            var tt = token.split('.');
+            $('#ShowAcc').val(tt[0]);
+        } else {
+            $('#row-fgtpw').hide();
+            $('#row-chgpw').show();
+        }
     }
 }
 
@@ -272,14 +283,142 @@ window.operateEvents = {
     // index  row
     'click #btn_show_photo': function (e, value, row, index) {
         console.log(row['photo']);
-        $('#img-show_dish_photo').prop('src',row['photo']);
+        $('#img-show_dish_photo').prop('src', row['photo']);
         $('#modal-show_dish_photo').modal('show');
     }
 };
 
 function FormSubmitListener() {
-    $('#form-').submit(function () {
+    $('#form-HasToken').submit(function () {
+        HideAlert();
+        var getURl = new URL(location.href);
+        if (!getURl.searchParams.has('token')) {
+            location.replace("./index.html#ChangePW");
+            return false;
+        }
+        var token = getURl.searchParams.get('token');
+        var npw = $('#InputNewPw_f').val();
+        var npwr = $('#InputNewPwRe_f').val();
+        if (npw == "" || npwr == "") {
+            $.alert({
+                title: '錯誤',
+                content: '新密碼或確認新密碼未輸入!!請再試一次',
+                type: 'red',
+                typeAnimated: true
+            });
+        } else if (npw != npwr) {
+            $('#InputNewPw_f').val('');
+            $('#InputNewPwRe_f').val('');
+            $.alert({
+                title: '錯誤',
+                content: '確認新密碼不符合!!請再試一次',
+                type: 'red',
+                typeAnimated: true
+            });
+        } else {
+            $('#InputNewPw_f').val('');
+            $('#InputNewPwRe_f').val('');
+            var data = {token: token, new_pswd: npw};
+            var res = request('POST', '/pswd/token', data, false);
+            if (res.code == 204) {
+                ShowAlart('alert-success', '更改成功!!!', false, true);
+            }
+            if (res.code == 403) {
+                if (res.data['error'] == 'Verify code expired') {
+                    $.alert({
+                        title: '錯誤',
+                        content: 'Token過期!!請重新申請',
+                        type: 'red',
+                        typeAnimated: true,
+                        onClose: function () {
+                            setTimeout(function () {
+                                location.replace("./index.html#ChangePW");
+                            }, 1000);
+                        }
+                    });
+                }
+            }
+            if (res.code == 404) {
+                if (res.data['error'] == 'The User Not Found') {
+                    $.alert({
+                        title: '錯誤',
+                        content: '使用者錯誤',
+                        type: 'red',
+                        typeAnimated: true,
+                        onClose: function () {
+                            setTimeout(function () {
+                                location.replace("./index.html#ChangePW");
+                            }, 1000);
+                        }
+                    });
+                }
+                if (res.data['error'] == 'The Token Not Found') {
+                    $.alert({
+                        title: '錯誤',
+                        content: 'Token錯誤!!請重新申請',
+                        type: 'red',
+                        typeAnimated: true,
+                        onClose: function () {
+                            setTimeout(function () {
+                                location.replace("./index.html#ChangePW");
+                            }, 1000);
+                        }
+                    });
+                }
+            }
+        }
+        return false;
+    });
+    $('#form-Chgpw').submit(function () {
 
+        return false;
+    });
+    $('#form-GetToken').submit(function () {
+        HideAlert();
+        var email = $('#InputEmail').val();
+        if (email == "") {
+            $.alert({
+                title: '錯誤',
+                content: 'E-mail未輸入!!請再試一次',
+                type: 'red',
+                typeAnimated: true
+            });
+        } else {
+            $('#InputEmail').val('');
+            var data = {email: email, redirect: 'AdminFrontend'};
+            var res = request('POST', '/pswd/forget', data, false);
+            if (res.code == 204) {
+                ShowAlart('alert-success', '已寄出!!!', false, true);
+            }
+            if (res.code == 400) {
+                if (res.data['error'] == 'Email format error') {
+                    $.alert({
+                        title: '錯誤',
+                        content: 'Email格式錯誤!!請重新輸入',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }
+            }
+            if (res.code == 404) {
+                if (res.data['error'] == 'The User Not Found') {
+                    $.alert({
+                        title: '錯誤',
+                        content: '使用者尚未註冊',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }
+                if (res.data['error'] == 'The Redirect Not Found') {
+                    $.alert({
+                        title: '錯誤',
+                        content: 'Redirect錯誤!!請聯繫管理員',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }
+            }
+        }
         return false;
     });
 }

@@ -20,7 +20,13 @@ function init() {
         pageSize: 5,
         search: true,
         showPaginationSwitch: true,
-        detailView:true,
+        detailView: true,
+        detailFormatter: function (index, row) {
+            console.log(row);
+
+            //return ['<p><b>calories:</b> ' + row['calories'] + '</p>','<p><b>protein:</b> ' + row['protein'] + '</p>'];
+            return '<p><b>calories:</b> ' + row['calories'] + '</p><p><b>protein:</b> ' + row['protein'] + '</p>' ;
+        },
         columns: [{
             field: 'id',
             title: 'ID',
@@ -71,7 +77,10 @@ function OnHashchangeListener() {
         $('#Content_DishManage').show();
         $("#title_bar").hide();
 
-        $('#table_dish').bootstrapTable('load', getDishList());
+        getDishList().then(data=>{
+            $('#table_dish').bootstrapTable('load', data);
+        });
+        //$('#table_dish').bootstrapTable('load', getDishList());
     }
     if (hash == '#SaleManage' && login_check() && PermissionCheck(false, true)) {
         $('#Content_SaleManage').show();
@@ -169,9 +178,9 @@ function ButtonOnClickListener() {
     });
 }
 
-function getDishList() {
-    var res = request('GET','/dish');
-    if(res.code==404){
+async function getDishList(){
+    var res = request('GET', '/dish');
+    if (res.code == 404) {
         $.alert({
             title: '錯誤',
             content: '找不到!!',
@@ -181,3 +190,16 @@ function getDishList() {
     }
     return res.data;
 }
+
+/*function getDishList() {
+    var res = request('GET', '/dish');
+    if (res.code == 404) {
+        $.alert({
+            title: '錯誤',
+            content: '找不到!!',
+            type: 'red',
+            typeAnimated: true
+        });
+    }
+    return res.data;
+}*/

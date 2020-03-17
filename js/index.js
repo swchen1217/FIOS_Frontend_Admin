@@ -23,9 +23,25 @@ function init() {
         detailView: true,
         detailFormatter: function (index, row) {
             console.log(row);
-
-            //return ['<p><b>calories:</b> ' + row['calories'] + '</p>','<p><b>protein:</b> ' + row['protein'] + '</p>'];
-            return '<p><b>calories:</b> ' + row['calories'] + '</p><p><b>protein:</b> ' + row['protein'] + '</p>';
+            var html =
+                '<div class="row" style="margin-left: 55px">' +
+                '<div class="col-6">' +
+                '<p><b>熱量: </b>' + row['calories'] + ' Kcal</p>' +
+                '<p><b>蛋白質: </b>' + row['protein'] + ' g</p>' +
+                '<p><b>脂肪: </b>' + row['fat'] + ' g</p>' +
+                '<p><b>碳水化合物: </b>' + row['carbohydrate'] + ' g</p>' +
+                '</div>';
+            if (row['contents'].length != 0) {
+                html +=
+                    '<div class="col-6">' +
+                    '<b>內容物: </b>' +
+                    '<ul>';
+                for (var i = 0; i < row['contents'].length; i++)
+                    html += '<li>' + row['contents'][i] + '</li>';
+                html += '</ul>';
+            }
+            html += '</div>';
+            return html;
         },
         columns: [{
             field: 'id',
@@ -42,9 +58,15 @@ function init() {
             title: '售價'
         }, {
             field: 'rating',
-            title: '評分'
+            title: '評分',
+            formatter: function (data) {
+                if (data != -1)
+                    return data;
+                else
+                    return '-';
+            },
         }, {
-            field: 'ratiupdated_atng',
+            field: 'updated_at',
             title: '修改時間'
         }, {
             field: 'photo_show',

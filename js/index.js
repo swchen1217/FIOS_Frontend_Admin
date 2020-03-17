@@ -373,19 +373,21 @@ function FormSubmitListener() {
         return false;
     });
     $('#form-Chgpw').submit(function () {
-        /*HideAlert();
-        var npw = $('#InputNewPw_f').val();
-        var npwr = $('#InputNewPwRe_f').val();
-        if (npw == "" || npwr == "") {
+        HideAlert();
+        var acc = $('#InputAcc').val();
+        var oldpw = $('#InputOldPw').val();
+        var npw = $('#InputNewPw').val();
+        var npwr = $('#InputNewPwRe').val();
+        if (npw == "" || npwr == "" || acc == "" || oldpw == "") {
             $.alert({
                 title: '錯誤',
-                content: '新密碼或確認新密碼未輸入!!請再試一次',
+                content: '未輸入完整!!請再試一次',
                 type: 'red',
                 typeAnimated: true
             });
         } else if (npw != npwr) {
-            $('#InputNewPw_f').val('');
-            $('#InputNewPwRe_f').val('');
+            $('#InputNewPw').val('');
+            $('#InputNewPwRe').val('');
             $.alert({
                 title: '錯誤',
                 content: '確認新密碼不符合!!請再試一次',
@@ -393,21 +395,24 @@ function FormSubmitListener() {
                 typeAnimated: true
             });
         } else {
-            $('#InputNewPw_f').val('');
-            $('#InputNewPwRe_f').val('');
-            var data = {email: email, redirect: 'AdminFrontend'};
-            var res = request('POST', '/pswd/forget', data, false);
+            $('#InputNewPw').val('');
+            $('#InputNewPwRe').val('');
+            var data = {account: acc, old_pswd: oldpw, new_pswd: npw};
+            var res = request('POST', '/pswd/account', data, false);
             if (res.code == 204) {
-                ShowAlart('alert-success', '已寄出!!!', false, true);
+                ShowAlart('alert-success', '成功修改!!!', false, true);
+                $('#InputAcc').val('');
+                $('#InputOldPw').val('');
             }
-            if (res.code == 400) {
-                if (res.data['error'] == 'Email format error') {
+            if (res.code == 403) {
+                if (res.data['error'] == 'Old password error') {
                     $.alert({
                         title: '錯誤',
-                        content: 'Email格式錯誤!!請重新輸入',
+                        content: '舊密碼錯誤!!請重新輸入',
                         type: 'red',
                         typeAnimated: true
                     });
+                    $('#InputOldPw').val('');
                 }
             }
             if (res.code == 404) {
@@ -418,17 +423,11 @@ function FormSubmitListener() {
                         type: 'red',
                         typeAnimated: true
                     });
-                }
-                if (res.data['error'] == 'The Redirect Not Found') {
-                    $.alert({
-                        title: '錯誤',
-                        content: 'Redirect錯誤!!請聯繫管理員',
-                        type: 'red',
-                        typeAnimated: true
-                    });
+                    $('#InputAcc').val('');
+                    $('#InputOldPw').val('');
                 }
             }
-        }*/
+        }
         return false;
     });
     $('#form-GetToken').submit(function () {

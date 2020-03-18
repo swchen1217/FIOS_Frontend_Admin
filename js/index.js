@@ -7,6 +7,14 @@ function init() {
     } else
         $('#btn_login').text("登入");
 
+    $('#balance-account_input').keypress(function (e) {
+        var key = e.which;
+        if (key == 13) {
+            $('#btn_balance_query').click();
+            return false;
+        }
+    });
+
     PermissionStr = [];
 
     $('#table_dish').bootstrapTable({
@@ -258,6 +266,7 @@ function OnHashchangeListener() {
     if (hash == '#BalanceManage' && login_check() && PermissionCheck(true, true)) {
         $('#Content_BalanceManage').show();
         $("#title_bar").hide();
+        $("#balance_block").hide();
     }
     if (hash == '#SystemSetting' && login_check() && PermissionCheck(true, true)) {
         $('#Content_SystemSetting').show();
@@ -539,6 +548,7 @@ function ButtonOnClickListener() {
     $('#btn_balance_query').click(function () {
         var account = $('#balance-account_input').val();
         if (account == '') {
+            $("#balance_block").hide();
             $.alert({
                 title: '錯誤',
                 content: '帳號未輸入!!',
@@ -549,6 +559,7 @@ function ButtonOnClickListener() {
         }
         var res = request('GET', '/balance/log/' + account, null);
         if (res.code == 404) {
+            $("#balance_block").hide();
             if (res.data['error'] == 'The User Not Found') {
                 $.alert({
                     title: '錯誤',
@@ -559,6 +570,7 @@ function ButtonOnClickListener() {
             }
             return false;
         }
+        $("#balance_block").show();
         $('#balance_user_info_show_account').text(account);
         $('#balance_user_info_show_name').text(res.data['name']);
         $('#balance_user_info_show_balance').text(res.data['balance']);

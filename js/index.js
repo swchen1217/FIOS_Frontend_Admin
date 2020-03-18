@@ -147,36 +147,12 @@ function init() {
         classes: "table table-bordered table-striped table-sm",
         striped: true,
         pagination: true,
-        sortable: true,
         uniqueId: 'id',
         sortName: 'id',
         pageNumber: 1,
         pageSize: 5,
         search: true,
         showPaginationSwitch: true,
-        /*detailView: true,
-        detailFormatter: function (index, row) {
-        console.log(row);
-        var html =
-            '<div class="row" style="margin: 0px;padding: 0px 55px">' +
-            '<div class="col-6">' +
-            '<p><b>ID: </b>' + row['calories'] + ' Kcal</p>' +
-            '<p><b>蛋白質: </b>' + row['protein'] + ' g</p>' +
-            '<p><b>脂肪: </b>' + row['fat'] + ' g</p>' +
-            '<p><b>碳水化合物: </b>' + row['carbohydrate'] + ' g</p>' +
-            '</div>';
-        if (row['contents'].length != 0) {
-            html +=
-                '<div class="col-6">' +
-                '<b>內容物: </b>' +
-                '<ul>';
-            for (var i = 0; i < row['contents'].length; i++)
-                html += '<li>' + row['contents'][i] + '</li>';
-            html += '</ul>';
-        }
-        html += '</div>';
-        return html;
-        },*/
         columns: [{
             field: 'id',
             title: '販賣ID',
@@ -199,6 +175,42 @@ function init() {
         }, {
             field: 'status',
             title: '狀態'
+        }, {
+            field: 'created_at',
+            title: '建立日期'
+        }]
+    });
+    $('#table_balance_log').bootstrapTable({
+        dataType: "json",
+        classes: "table table-bordered table-striped table-sm",
+        striped: true,
+        pagination: true,
+        uniqueId: 'id',
+        sortName: 'create_at',
+        pageNumber: 1,
+        pageSize: 5,
+        columns: [{
+            field: 'id',
+            title: '儲值ID',
+            //formatter: LinkFormatterCM
+        }, {
+            field: 'account',
+            title: '帳號'
+        }, {
+            field: 'user_name',
+            title: '姓名'
+        }, {
+            field: 'event',
+            title: '事件'
+        }, {
+            field: 'money',
+            title: '金額'
+        }, {
+            field: 'trigger_name',
+            title: '操作者姓名'
+        }, {
+            field: 'note',
+            title: '備註'
         }, {
             field: 'created_at',
             title: '建立日期'
@@ -524,8 +536,33 @@ function FormSubmitListener() {
 }
 
 function ButtonOnClickListener() {
-    $('#btn_').click(function () {
-
+    $('#btn_balance_query').click(function () {
+        var account = $('#balance-account_input').val();
+        if (account == '') {
+            $.alert({
+                title: '錯誤',
+                content: '帳號未輸入!!',
+                type: 'red',
+                typeAnimated: true
+            });
+            return false;
+        }
+        var res = request('GET', '/balance/log/' + account, null);
+        if (res.code == 404) {
+            if (res.data['error'] == 'The User Not Found') {
+                $.alert({
+                    title: '錯誤',
+                    content: '使用者錯誤!!',
+                    type: 'red',
+                    typeAnimated: true
+                });
+            }
+            return false;
+        }
+        $('#balance_user_info_show_account').text(account);
+        $('#balance_user_info_show_name').text(res.data['name']);
+        $('#balance_user_info_show_balance').text(res.data['balance']);
+        $('#table_balance_log').bootstrapTable('load', res.data['log']);
     });
 }
 

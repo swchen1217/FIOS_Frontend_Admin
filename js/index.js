@@ -271,6 +271,8 @@ function OnHashchangeListener() {
     if (hash == '#SystemSetting' && login_check() && PermissionCheck(true, true)) {
         $('#Content_SystemSetting').show();
         $("#title_bar").hide();
+
+        ShowAlart('alert-warning', '尚未開放!!!', false, false);
     }
     if (hash == '#UserManage' && login_check() && PermissionCheck(true, true)) {
         $('#Content_UserManage').show();

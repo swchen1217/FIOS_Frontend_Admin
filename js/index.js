@@ -1,11 +1,8 @@
 var user;
 
 function init() {
-    if ($.cookie('access_token') != undefined) {
+    if ($.cookie('access_token') != undefined)
         user = jwt_decode($.cookie('access_token'))['user'];
-        $('#btn_login').text(user['name'] + "/登出");
-    } else
-        $('#btn_login').text("登入");
 
     $('#balance-account_input').keypress(function (e) {
         var key = e.which;
@@ -227,6 +224,11 @@ function init() {
 }
 
 function OnHashchangeListener() {
+    if ($.cookie('access_token') != undefined)
+        $('#btn_login').text(user['name'] + "/登出");
+    else
+        $('#btn_login').text("登入");
+
     var hash = location.hash;
     if (hash != '') {
         $("#mNav .nav").find(".active").removeClass("active");

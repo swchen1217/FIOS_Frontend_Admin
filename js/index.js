@@ -628,9 +628,9 @@ function ButtonOnClickListener() {
             $('#balance-money_input').val('');
             var html =
                 '<p><b>帳號: </b>' + balance_account + '</p>' +
-                '<p><b>儲值前金額: </b>' + res.data['Balance before top up'] + '</p>' +
-                '<p><b>儲值金額: </b>' + res.data['Total top up'] + '</p>' +
-                '<p><b>儲值後金額: </b>' + res.data['Balance after top up'] + '</p>';
+                '<p><b>儲值前金額: </b>' + res.data['before'] + '</p>' +
+                '<p><b>儲值金額: </b>' + res.data['total'] + '</p>' +
+                '<p><b>儲值後金額: </b>' + res.data['after'] + '</p>';
             $.alert({
                 title: '成功',
                 content: html,
@@ -705,9 +705,9 @@ function ButtonOnClickListener() {
                             $('#balance-money_input').val('');
                             var html =
                                 '<p><b>帳號: </b>' + balance_account + '</p>' +
-                                '<p><b>扣款前金額: </b>' + res.data['Balance before deduct'] + '</p>' +
-                                '<p><b>扣款金額: </b>' + res.data['Total deduct'] + '</p>' +
-                                '<p><b>扣款後金額: </b>' + res.data['Balance after deduct'] + '</p>';
+                                '<p><b>扣款前金額: </b>' + res.data['before'] + '</p>' +
+                                '<p><b>扣款金額: </b>' + res.data['total'] + '</p>' +
+                                '<p><b>扣款後金額: </b>' + res.data['after'] + '</p>';
                             $.alert({
                                 title: '成功',
                                 content: html,

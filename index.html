@@ -181,22 +181,22 @@
         </div>
     </div>
     <div id="Content_BalanceManage">
-        <div class="row justify-content-center" style="margin-top: 20px">
-            <div class="col-6">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-balance_account">帳號</span>
-                    </div>
-                    <input type="text" class="form-control" id="balance-account_input" placeholder="輸入帳號(學號)">
-                    <div class="input-group-append">
-                        <button type="submit" id="btn_balance_query" class="btn btn-default btn-primary btn-block">
-                            查詢
-                        </button>
+        <div id="balance_block">
+            <div class="row justify-content-center" style="margin-top: 20px">
+                <div class="col-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-balance_account">帳號</span>
+                        </div>
+                        <input type="text" class="form-control" id="balance-account_input" placeholder="輸入帳號(學號)">
+                        <div class="input-group-append">
+                            <button type="submit" id="btn_balance_query" class="btn btn-default btn-primary btn-block">
+                                查詢
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="balance_block">
             <div class="row">
                 <div class="col-md-4" style="padding-right: 5px">
                     <div class="card" id="card-balance_user_info">
@@ -211,36 +211,34 @@
                     </div>
                 </div>
                 <div class="col-md-8" style="padding-left: 5px">
-                    <div class="card" id="card-balance_balance_log">
-                        <div class="card-header" style="height: 55px">
-                            <h4 class="card-title">餘額紀錄</h4>
-                        </div>
-                        <div class="card-body" style="padding-bottom: 0px;">
-                            <div class="row" id="row-balance_log">
-                                <table id="table_balance_log"></table>
+                    <div class="card" id="card-balance_2" style="border-color: #acbfd4;border-width: 2px;">
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-outline-success btn-lg btn-block">儲值</button>
                             </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-outline-danger btn-lg btn-block">扣款</button>
+                            </div>
+                        </div>
+                        <div class="row">
+
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6" style="padding-left: 5px">
-                    <div class="card" id="card-balance_topUp">
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card text-center" id="card-balance_balance_log">
                         <div class="card-header" style="height: 55px">
-                            <h4 class="card-title">儲值</h4>
+                            <h4 class="card-title">扣款紀錄</h4>
                         </div>
                         <div class="card-body" style="padding-bottom: 0px;">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6" style="padding-left: 5px">
-                    <div class="card" id="card-balance_deduct">
-                        <div class="card-header" style="height: 55px">
-                            <h4 class="card-title">扣款</h4>
-                        </div>
-                        <div class="card-body" style="padding-bottom: 0px;">
-
+                            <div class="row" id="row-balance_log">
+                                <table id="table_balance_log"></table>
+                            </div>
                         </div>
                     </div>
                 </div>

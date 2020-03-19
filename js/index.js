@@ -268,7 +268,8 @@ function OnHashchangeListener() {
     if (hash == '#BalanceManage' && login_check() && PermissionCheck(true, true)) {
         $('#Content_BalanceManage').show();
         $("#title_bar").hide();
-        $("#balance_block").hide();
+
+        //$("#balance_block").hide();
     }
     if (hash == '#SystemSetting' && login_check() && PermissionCheck(true, true)) {
         $('#Content_SystemSetting').show();

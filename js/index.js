@@ -593,7 +593,9 @@ function ButtonOnClickListener() {
     $('#btn_balance_money_1000').click(function () {
         addValueToBalanceInput(1000);
     });
-    
+    $('#btn_balance_reset').click(function () {
+        $('#balance-money_input').val('');
+    });
 }
 
 async function getDishList() {

@@ -269,7 +269,7 @@ function OnHashchangeListener() {
         $('#Content_BalanceManage').show();
         $("#title_bar").hide();
 
-        $("#balance_block").hide();
+        //$("#balance_block").hide();
     }
     if (hash == '#SystemSetting' && login_check() && PermissionCheck(true, true)) {
         $('#Content_SystemSetting').show();
@@ -581,6 +581,19 @@ function ButtonOnClickListener() {
         $('#balance_user_info_show_balance').text(res.data['balance']);
         $('#table_balance_log').bootstrapTable('load', res.data['log']);
     });
+    $('#btn_balance_money_50').click(function () {
+        addValueToBalanceInput(50);
+    });
+    $('#btn_balance_money_100').click(function () {
+        addValueToBalanceInput(100);
+    });
+    $('#btn_balance_money_500').click(function () {
+        addValueToBalanceInput(500);
+    });
+    $('#btn_balance_money_1000').click(function () {
+        addValueToBalanceInput(1000);
+    });
+    
 }
 
 async function getDishList() {
@@ -620,4 +633,12 @@ async function getSaleList() {
         });
     }
     return res.data;
+}
+
+function addValueToBalanceInput(num = 0) {
+    var read = $('#balance-money_input').val();
+    if (read == '')
+        read = 0;
+    var money = parseInt(read) + num;
+    $('#balance-money_input').val(money);
 }

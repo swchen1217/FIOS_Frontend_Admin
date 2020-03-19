@@ -203,7 +203,7 @@
                         <div class="card-header" style="height: 55px">
                             <h4 class="card-title">使用者資訊</h4>
                         </div>
-                        <div class="card-body" style="padding-bottom: 0px;">
+                        <div class="card-body">
                             <p><b>帳號 : </b><span id="balance_user_info_show_account"></span></p>
                             <p><b>姓名 : </b><span id="balance_user_info_show_name"></span></p>
                             <p><b>餘額 : </b>$ <span id="balance_user_info_show_balance"></span></p>
@@ -220,8 +220,37 @@
                                 <button type="button" class="btn btn-outline-danger btn-lg btn-block">扣款</button>
                             </div>
                         </div>
+                    </div>
+                    <div class="card" id="card-balance_3" style="border-color: #acbfd4;border-width: 2px;">
                         <div class="row">
-
+                            <div class="col-3">
+                                <button type="button" class="btn btn-primary btn-lg btn-block">50</button>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" class="btn btn-primary btn-lg btn-block">100</button>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" class="btn btn-primary btn-lg btn-block">500</button>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" class="btn btn-primary btn-lg btn-block">1000</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" id="card-balance_4" style="border-color: #acbfd4;border-width: 2px;">
+                        <div class="row justify-content-center">
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">金額</span>
+                                    </div>
+                                    <input type="text" class="form-control" id="balance-money_input"
+                                           placeholder="輸入金額(儲值或扣款)" style="height: 48px">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" class="btn btn-outline-danger btn-lg btn-block">重設</button>
+                            </div>
                         </div>
                     </div>
                 </div>

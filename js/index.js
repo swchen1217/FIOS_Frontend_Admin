@@ -269,7 +269,7 @@ function OnHashchangeListener() {
         $('#Content_BalanceManage').show();
         $("#title_bar").hide();
 
-        //$("#balance_block").hide();
+        $("#balance_block").hide();
     }
     if (hash == '#SystemSetting' && login_check() && PermissionCheck(true, true)) {
         $('#Content_SystemSetting').show();
@@ -549,6 +549,9 @@ function FormSubmitListener() {
     });
 }
 
+var balance_user_id;
+var balance_account;
+
 function ButtonOnClickListener() {
     $('#btn_balance_query').click(function () {
         var account = $('#balance-account_input').val();
@@ -575,6 +578,8 @@ function ButtonOnClickListener() {
             }
             return false;
         }
+        balance_account = account;
+        balance_user_id = res.data['user_id'];
         $("#balance_block").show();
         $('#balance_user_info_show_account').text(account);
         $('#balance_user_info_show_name').text(res.data['name']);
@@ -595,6 +600,90 @@ function ButtonOnClickListener() {
     });
     $('#btn_balance_reset').click(function () {
         $('#balance-money_input').val('');
+    });
+    $('#btn_balance_topUp').click(function () {
+        var money = $('#balance-money_input').val();
+        if (money == '') {
+            $.alert({
+                title: '錯誤',
+                content: '金額不可為空!!',
+                type: 'red',
+                typeAnimated: true
+            });
+            return false;
+        }
+        money = parseInt(money);
+        if (money < 0) {
+            $.alert({
+                title: '錯誤',
+                content: '金額不可為負!!',
+                type: 'red',
+                typeAnimated: true
+            });
+            return false;
+        }
+        var data = {user_id: balance_user_id, money: money};
+        var res = request('POST', '/balance/top-up', data);
+        if (res.code == 200) {
+            $('#balance-money_input').val('');
+            var html =
+                '<p><b>帳號: </b>' + balance_account + '</p>' +
+                '<p><b>儲值前金額: </b>' + res.data['Balance before top up'] + '</p>' +
+                '<p><b>儲值金額: </b>' + res.data['Total top up'] + '</p>' +
+                '<p><b>儲值後金額: </b>' + res.data['Balance after top up'] + '</p>';
+            $.alert({
+                title: '成功',
+                content: html,
+                type: 'green',
+                typeAnimated: true
+            });
+            var res2 = request('GET', '/balance/log/' + balance_account, null);
+            $('#balance_user_info_show_account').text(balance_account);
+            $('#balance_user_info_show_name').text(res2.data['name']);
+            $('#balance_user_info_show_balance').text(res2.data['balance']);
+            $('#table_balance_log').bootstrapTable('load', res2.data['log']);
+        }
+        if (res.code == 400) {
+            if (res.data['error'] == '`money` must unsigned') {
+                $.alert({
+                    title: '錯誤',
+                    content: '金額不可為負!!',
+                    type: 'red',
+                    typeAnimated: true
+                });
+            }
+            return false;
+        }
+        if (res.code == 404) {
+            if (res.data['error'] == 'The User Not Found') {
+                $.alert({
+                    title: '錯誤',
+                    content: '使用者錯誤!!',
+                    type: 'red',
+                    typeAnimated: true
+                });
+            }
+            return false;
+        }
+    });
+    $('#btn_balance_deduct').click(function () {
+        $.confirm({
+            title: '確認扣款!!',
+            content: '確認新增此社團??',
+            type: 'red',
+            buttons: {
+                confirm: {
+                    text: '確認',
+                    btnClass: 'btn-blue',
+                    action: function () {
+
+                    }
+                },
+                cancel: {
+                    text: '取消'
+                }
+            }
+        });
     });
 }
 

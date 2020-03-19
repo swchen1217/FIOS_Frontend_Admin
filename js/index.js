@@ -667,16 +667,89 @@ function ButtonOnClickListener() {
         }
     });
     $('#btn_balance_deduct').click(function () {
+        var money = $('#balance-money_input').val();
+        if (money == '') {
+            $.alert({
+                title: '錯誤',
+                content: '金額不可為空!!',
+                type: 'red',
+                typeAnimated: true
+            });
+            return false;
+        }
+        money = parseInt(money);
+        if (money < 0) {
+            $.alert({
+                title: '錯誤',
+                content: '金額不可為負!!',
+                type: 'red',
+                typeAnimated: true
+            });
+            return false;
+        }
+        var html2 =
+            '<p><b>帳號: </b>' + balance_account + '</p>' +
+            '<p><b>扣款金額: </b>' + money + '</p>';
         $.confirm({
             title: '確認扣款!!',
-            content: '確認新增此社團??',
+            content: html2,
             type: 'red',
             buttons: {
                 confirm: {
                     text: '確認',
                     btnClass: 'btn-blue',
                     action: function () {
-
+                        var data = {user_id: balance_user_id, money: money};
+                        var res = request('POST', '/balance/deduct', data);
+                        if (res.code == 200) {
+                            $('#balance-money_input').val('');
+                            var html =
+                                '<p><b>帳號: </b>' + balance_account + '</p>' +
+                                '<p><b>扣款前金額: </b>' + res.data['Balance before deduct'] + '</p>' +
+                                '<p><b>扣款金額: </b>' + res.data['Total deduct'] + '</p>' +
+                                '<p><b>扣款後金額: </b>' + res.data['Balance after deduct'] + '</p>';
+                            $.alert({
+                                title: '成功',
+                                content: html,
+                                type: 'green',
+                                typeAnimated: true
+                            });
+                            var res2 = request('GET', '/balance/log/' + balance_account, null);
+                            $('#balance_user_info_show_account').text(balance_account);
+                            $('#balance_user_info_show_name').text(res2.data['name']);
+                            $('#balance_user_info_show_balance').text(res2.data['balance']);
+                            $('#table_balance_log').bootstrapTable('load', res2.data['log']);
+                        }
+                        if (res.code == 400) {
+                            if (res.data['error'] == '`money` must unsigned') {
+                                $.alert({
+                                    title: '錯誤',
+                                    content: '金額不可為負!!',
+                                    type: 'red',
+                                    typeAnimated: true
+                                });
+                            }
+                            if (res.data['error'] == 'Balance after deduct must unsigned') {
+                                $.alert({
+                                    title: '錯誤',
+                                    content: '扣款後餘額為負!!',
+                                    type: 'red',
+                                    typeAnimated: true
+                                });
+                            }
+                            return false;
+                        }
+                        if (res.code == 404) {
+                            if (res.data['error'] == 'The User Not Found') {
+                                $.alert({
+                                    title: '錯誤',
+                                    content: '使用者錯誤!!',
+                                    type: 'red',
+                                    typeAnimated: true
+                                });
+                            }
+                            return false;
+                        }
                     }
                 },
                 cancel: {

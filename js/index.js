@@ -196,7 +196,7 @@ function init() {
         pageSize: 5,
         columns: [{
             field: 'id',
-            title: '儲值ID',
+            title: '交易ID',
             //formatter: LinkFormatterCM
         }/*, {
             field: 'account',

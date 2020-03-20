@@ -198,10 +198,10 @@ function init() {
             field: 'id',
             title: '儲值ID',
             //formatter: LinkFormatterCM
-        }, {
+        }/*, {
             field: 'account',
             title: '帳號'
-        }, {
+        }*/, {
             field: 'user_name',
             title: '姓名'
         }, {
@@ -578,6 +578,7 @@ function ButtonOnClickListener() {
             }
             return false;
         }
+        console.log(res.data);
         balance_account = account;
         balance_user_id = res.data['user_id'];
         $("#balance_block").show();

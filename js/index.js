@@ -270,6 +270,10 @@ function OnHashchangeListener() {
         $("#title_bar").hide();
 
         $("#balance_block").hide();
+
+        getBalanceToday().then(data => {
+            $('#balance_money_show_today').text(data['Total revenue']);
+        });
     }
     if (hash == '#SystemSetting' && login_check() && PermissionCheck(true, true)) {
         $('#Content_SystemSetting').show();
@@ -806,4 +810,9 @@ function addValueToBalanceInput(num = 0) {
         read = 0;
     var money = parseInt(read) + num;
     $('#balance-money_input').val(money);
+}
+
+async function getBalanceToday() {
+    var res = request('GET', '/balance/today');
+    return res.data;
 }

@@ -187,8 +187,7 @@ function init() {
     });
     $('#table_balance_log').bootstrapTable({
         dataType: "json",
-        classes: "table table-bordered table-striped table-sm",
-        striped: true,
+        classes: "table table-sm",
         pagination: true,
         uniqueId: 'id',
         sortName: 'create_at',

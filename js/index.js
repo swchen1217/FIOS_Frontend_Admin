@@ -260,7 +260,9 @@ function OnHashchangeListener() {
         $('#Content_OrderManage').show();
         $("#title_bar").hide();
 
-        getOrderInfoToday().then(data => {
+        var date=dayjs().format('YYYY-MM-DD');
+        $('#order_info_date').val(date);
+        getOrderInfo(date).then(data => {
 
         });
 
@@ -820,10 +822,10 @@ async function getBalanceToday() {
     return res.data;
 }
 
-async function getOrderInfoToday() {
+async function getOrderInfo(date) {
     var order_info = document.getElementById("order_info");
     order_info.innerHTML = "";
-    var res = request('GET', '/order/info/today');
+    var res = request('GET', '/order/info/' + date);
     var data = res.data;
     for (var i = 0; i < data.length; i++) {
         var res2 = request('GET', '/sale/id/' + data[i]['sale_id']);

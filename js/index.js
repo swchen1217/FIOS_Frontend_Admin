@@ -260,6 +260,10 @@ function OnHashchangeListener() {
         $('#Content_OrderManage').show();
         $("#title_bar").hide();
 
+        getOrderInfoToday().then(data => {
+            
+        });
+
         getOrderList().then(data => {
             $('#table_order').bootstrapTable('load', data);
         });
@@ -813,5 +817,10 @@ function addValueToBalanceInput(num = 0) {
 
 async function getBalanceToday() {
     var res = request('GET', '/balance/today');
+    return res.data;
+}
+
+async function getOrderInfoToday() {
+    var res = request('GET', '/order/info/today');
     return res.data;
 }

@@ -822,7 +822,7 @@ async function getBalanceToday() {
 
 async function getOrderInfoToday() {
     var order_info = document.getElementById("order_info");
-    order_info.innerHTML="";
+    order_info.innerHTML = "";
     var res = request('GET', '/order/info/today');
     var data = res.data;
     for (var i = 0; i < data.length; i++) {
@@ -866,7 +866,7 @@ async function getOrderInfoToday() {
         var span_1 = document.createElement("span");
         var span_2 = document.createElement("span");
 
-        titleH5.innerText = data2['dish']['manufacturer_name']+" | "+data2['dish']['name'];
+        titleH5.innerText = data2['dish']['manufacturer_name'] + " | " + data2['dish']['name'];
         b_1.innerText = "總數量: ";
         b_2.innerText = "總金額: $";
         span_1.innerText = data[i]['count'];

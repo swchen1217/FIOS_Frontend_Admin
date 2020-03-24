@@ -823,8 +823,71 @@ async function getBalanceToday() {
 async function getOrderInfoToday() {
     var res = request('GET', '/order/info/today');
     var data = res.data;
-    //var res2 = request('GET', '/sale/date/'+dayjs().format('YYYY-MM-DD'));
-    //var data2=res2.data;
+    for (var i = 0; i < data.length; i++) {
+        var res2 = request('GET', '/sale/id/' + data[i]['sale_id']);
+        var data2 = res2.data;
 
+        var col = document.createElement("div");
+        col.className = "col-12 col-md-6";
+        col.style.padding = "0px 5px";
+        var card = document.createElement("div");
+        card.className = "card";
+        card.style.padding = "5px";
+        card.style.margin = "5px auto";
+        var card_header = document.createElement("div");
+        card_header.className = "card-header";
+        card_header.style.padding = "10px 20px";
+        var titleH5 = document.createElement("h5");
+        titleH5.style.marginBottom = "2px";
+        var card_body = document.createElement("div");
+        card_body.className = "card-body";
+        card_body.style.paddingTop = "15px";
+        card_body.style.paddingBottom = "10px";
+        var row = document.createElement("div");
+        row.className = "row";
+        var col_1 = document.createElement("div");
+        col_1.className = "col";
+        var col_2 = document.createElement("div");
+        col_2.className = "col";
+        var card_1 = document.createElement("div");
+        card_1.className = "card";
+        card_1.style.margin = "0px";
+        var card_2 = document.createElement("div");
+        card_2.className = "card";
+        card_2.style.margin = "0px";
+        var p_1 = document.createElement("p");
+        p_1.style.margin = "0px";
+        var p_2 = document.createElement("p");
+        p_2.style.margin = "0px";
+        var b_1 = document.createElement("b");
+        var b_2 = document.createElement("b");
+        var span_1 = document.createElement("span");
+        var span_2 = document.createElement("span");
+
+        titleH5.innerText = data2['dish']['manufacturer_name']+" | "+data2['dish']['name'];
+        b_1.innerText = "總數量: ";
+        b_2.innerText = "總金額: $";
+        span_1.innerText = data[i]['count'];
+        span_2.innerText = data[i]['total'];
+
+        card_header.appendChild(titleH5);
+        p_1.appendChild(b_1);
+        p_1.appendChild(span_1);
+        p_2.appendChild(b_2);
+        p_2.appendChild(span_2);
+        card_1.appendChild(p_1);
+        card_2.appendChild(p_2);
+        col_1.appendChild(card_1);
+        col_2.appendChild(card_2);
+        row.appendChild(col_1);
+        row.appendChild(col_2);
+        card_body.appendChild(row);
+        card.appendChild(card_header);
+        card.appendChild(card_body);
+        col.appendChild(card);
+
+        var order_info = document.getElementById("order_info");
+        order_info.appendChild(col);
+    }
     return true;
 }

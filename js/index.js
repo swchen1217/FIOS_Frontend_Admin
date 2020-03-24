@@ -261,7 +261,7 @@ function OnHashchangeListener() {
         $("#title_bar").hide();
 
         getOrderInfoToday().then(data => {
-            
+
         });
 
         getOrderList().then(data => {
@@ -822,5 +822,9 @@ async function getBalanceToday() {
 
 async function getOrderInfoToday() {
     var res = request('GET', '/order/info/today');
-    return res.data;
+    var data = res.data;
+    //var res2 = request('GET', '/sale/date/'+dayjs().format('YYYY-MM-DD'));
+    //var data2=res2.data;
+
+    return true;
 }

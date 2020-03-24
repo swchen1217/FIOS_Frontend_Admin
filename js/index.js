@@ -821,6 +821,8 @@ async function getBalanceToday() {
 }
 
 async function getOrderInfoToday() {
+    var order_info = document.getElementById("order_info");
+    order_info.innerHTML="";
     var res = request('GET', '/order/info/today');
     var data = res.data;
     for (var i = 0; i < data.length; i++) {
@@ -886,7 +888,6 @@ async function getOrderInfoToday() {
         card.appendChild(card_body);
         col.appendChild(card);
 
-        var order_info = document.getElementById("order_info");
         order_info.appendChild(col);
     }
     return true;

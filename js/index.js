@@ -260,7 +260,7 @@ function OnHashchangeListener() {
         $('#Content_OrderManage').show();
         $("#title_bar").hide();
 
-        var date=dayjs().format('YYYY-MM-DD');
+        var date = dayjs().format('YYYY-MM-DD');
         $('#order_info_date').val(date);
         getOrderInfo(date).then(data => {
 
@@ -826,11 +826,8 @@ async function getOrderInfo(date) {
     var order_info = document.getElementById("order_info");
     order_info.innerHTML = "";
     var res = request('GET', '/order/info/' + date);
-    var data = res.data;
-    for (var i = 0; i < data.length; i++) {
-        var res2 = request('GET', '/sale/id/' + data[i]['sale_id']);
-        var data2 = res2.data;
-
+    var saleData = res.data['sale'];
+    for (var i = 0; i < saleData.length; i++) {
         var col = document.createElement("div");
         col.className = "col-12 col-md-6";
         col.style.padding = "0px 5px";
@@ -868,11 +865,11 @@ async function getOrderInfo(date) {
         var span_1 = document.createElement("span");
         var span_2 = document.createElement("span");
 
-        titleH5.innerText = data2['dish']['manufacturer_name'] + " | " + data2['dish']['name'];
+        titleH5.innerText = saleData[i]['manufacturer_name'] + " | " + saleData[i]['name'];
         b_1.innerText = "總數量: ";
         b_2.innerText = "總金額: $";
-        span_1.innerText = data[i]['count'];
-        span_2.innerText = data[i]['total'];
+        span_1.innerText = saleData[i]['count'];
+        span_2.innerText = saleData[i]['total'];
 
         card_header.appendChild(titleH5);
         p_1.appendChild(b_1);

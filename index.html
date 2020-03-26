@@ -173,8 +173,20 @@
         </div>
     </div>
     <div id="Content_OrderManage">
-        <div class="row justify-content-center" style="margin-top: 10px">
-            <div class="col-10 col-sm-8 col-md-6 col-lg-4">
+        <div class="row justify-content-start" style="margin-top: 10px">
+            <div class="col-6 col-sm-6 col-md-3 col-lg-2" style="padding: 10px 15px">
+                <a class="btn btn-primary btn-block" data-toggle="collapse" href="#order_info_sale"
+                   style="height: 42px">
+                    販賣
+                </a>
+            </div>
+            <div class="col-6 col-sm-6 col-md-3 col-lg-2" style="padding: 10px 15px">
+                <a class="btn btn-primary btn-block" data-toggle="collapse" href="#order_info_class"
+                   style="height: 42px">
+                    班級
+                </a>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                 <div class="card" style="border-color: #acbfd4;border-width: 2px;padding: 10px 15px;margin: 0px">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -190,8 +202,8 @@
                 </div>
             </div>
         </div>
-        <div class="row" id="order_info_sale" style="margin-top: 5px;padding: 0px 10px"></div>
-        <div class="row" id="order_info_class"></div>
+        <div class="row collapse" id="order_info_sale" style="margin-top: 5px;padding: 0px 10px"></div>
+        <div class="row collapse" id="order_info_class"></div>
         <div class="row" id="row-order-list">
             <div class="container">
                 <table id="table_order"></table>

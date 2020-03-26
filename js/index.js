@@ -916,20 +916,57 @@ async function getOrderInfo(date) {
             var card_c_body = document.createElement("div");
             card_c_body.className = "card-body";
             card_c_body.style.padding = "5px";
+            var cc = g + paddingLeft(c + "", 2);
 
             for (var m = 0; m < sortM.length; m++) {
                 var row_m = document.createElement("div");
                 row_m.className = "row";
                 if (m != sortM.length - 1)
                     row_m.style.marginBottom = "5px";
-                
+                var col_m_name = document.createElement("div");
+                col_m_name.className = "col-4";
+                var col_m_name_p = document.createElement("p");
+                col_m_name_p.style.margin = "0px";
+                col_m_name_p.style.lineHeight = "36px";
+                var col_m_name_b = document.createElement("b");
+                col_m_name_b.innerHTML = sortM[m];
+                col_m_name_p.appendChild(col_m_name_b);
+                col_m_name.appendChild(col_m_name_p);
+                row_m.appendChild(col_m_name);
+                for (var sm = 0; sm < sortMS[m].length; sm++) {
+                    var col_sm = document.createElement("div");
+                    col_sm.className = "col-4";
+                    if (sm % 2 == 0)
+                        col_sm.style.paddingLeft = "5px";
+                    else
+                        col_sm.style.paddingRight = "5px";
+                    var card_sm = document.createElement("div");
+                    card_sm.className = "card";
+                    card_sm.style.padding = "5px 10px";
+                    card_sm.style.margin = "0px";
+                    var card_sm_p = document.createElement("p");
+                    card_sm_p.style.margin = "0px";
+                    var card_sm_b = document.createElement("b");
+                    var card_sm_span = document.createElement("span");
+
+                    card_sm_b.innerHTML = sortMS[m][sm] + ": ";
+                    //card_sm_span.innerHTML = classData[cc][sortData[m][sm]] ?? "0";
+                    card_sm_span.innerHTML = "0";
+
+                    card_sm_p.appendChild(card_sm_b);
+                    card_sm_p.appendChild(card_sm_span);
+                    col_sm.appendChild(card_sm_p);
+                    row_m.appendChild(col_sm);
+                }
+                card_c_body.appendChild(row_m);
             }
 
-            card_c_header_h5.innerHTML = g + paddingLeft(c + "", 2);
+            card_c_header_h5.innerHTML = cc;
 
             card_c_header.appendChild(card_c_header_h5);
-            col_g.appendChild(card_c_header);
-            col_g.appendChild(card_c_body);
+            card_c.appendChild(card_c_header);
+            card_c.appendChild(card_c_body);
+            col_g.appendChild(card_c);
         }
         order_info_class.appendChild(col_g);
     }

@@ -936,7 +936,7 @@ async function getOrderInfo(date) {
                 for (var sm = 0; sm < sortMS[m].length; sm++) {
                     var col_sm = document.createElement("div");
                     col_sm.className = "col-4";
-                    if (sm % 2 == 0)
+                    if (sm % 2 == 1)
                         col_sm.style.paddingLeft = "5px";
                     else
                         col_sm.style.paddingRight = "5px";
@@ -955,7 +955,8 @@ async function getOrderInfo(date) {
 
                     card_sm_p.appendChild(card_sm_b);
                     card_sm_p.appendChild(card_sm_span);
-                    col_sm.appendChild(card_sm_p);
+                    card_sm.appendChild(card_sm_p);
+                    col_sm.appendChild(card_sm);
                     row_m.appendChild(col_sm);
                 }
                 card_c_body.appendChild(row_m);

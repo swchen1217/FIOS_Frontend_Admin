@@ -12,8 +12,6 @@ function init() {
         }
     });
 
-    PermissionStr = [];
-
     $('#table_dish').bootstrapTable({
         dataType: "json",
         classes: "table table-bordered table-striped table-sm",
@@ -85,9 +83,13 @@ function init() {
             title: '販售',
             width: 70,
             formatter: '<button id="btn_sale" class="btn btn-primary">販售</button>',
+        }, {
+            field: 'delete',
+            title: '刪除',
+            width: 70,
+            formatter: '<button id="btn_dish_delete" class="btn btn-danger">刪除</button>',
         }]
     });
-
     $('#table_order').bootstrapTable({
         dataType: "json",
         classes: "table table-bordered table-striped table-sm",
@@ -100,29 +102,6 @@ function init() {
         pageSize: 10,
         search: true,
         showPaginationSwitch: true,
-        //detailView: true,
-        //detailFormatter: function (index, row) {
-        /*console.log(row);
-        var html =
-            '<div class="row" style="margin: 0px;padding: 0px 55px">' +
-            '<div class="col-6">' +
-            '<p><b>熱量: </b>' + row['calories'] + ' Kcal</p>' +
-            '<p><b>蛋白質: </b>' + row['protein'] + ' g</p>' +
-            '<p><b>脂肪: </b>' + row['fat'] + ' g</p>' +
-            '<p><b>碳水化合物: </b>' + row['carbohydrate'] + ' g</p>' +
-            '</div>';
-        if (row['contents'].length != 0) {
-            html +=
-                '<div class="col-6">' +
-                '<b>內容物: </b>' +
-                '<ul>';
-            for (var i = 0; i < row['contents'].length; i++)
-                html += '<li>' + row['contents'][i] + '</li>';
-            html += '</ul>';
-        }
-        html += '</div>';
-        return html;*/
-        //},
         columns: [{
             field: 'order_id',
             title: 'ID',
@@ -145,6 +124,11 @@ function init() {
         }, {
             field: 'sale.sale_at',
             title: '日期'
+        }, {
+            field: 'delete',
+            title: '刪除',
+            width: 70,
+            formatter: '<button id="btn_order_delete" class="btn btn-danger">刪除</button>',
         }]
     });
     $('#table_sale').bootstrapTable({
@@ -155,7 +139,7 @@ function init() {
         uniqueId: 'id',
         sortName: 'id',
         pageNumber: 1,
-        pageSize: 5,
+        pageSize: 10,
         search: true,
         showPaginationSwitch: true,
         columns: [{
@@ -183,6 +167,11 @@ function init() {
         }, {
             field: 'created_at',
             title: '建立日期'
+        }, {
+            field: 'delete',
+            title: '刪除',
+            width: 70,
+            formatter: '<button id="btn_dish_delete" class="btn btn-danger">刪除</button>',
         }]
     });
     $('#table_balance_log').bootstrapTable({
@@ -289,6 +278,8 @@ function OnHashchangeListener() {
     if (hash == '#UserManage' && login_check() && PermissionCheck(true, true)) {
         $('#Content_UserManage').show();
         $("#title_bar").hide();
+
+        ShowAlart('alert-warning', '尚未開放!!!', false, false);
 
         /*$('#table_user').bootstrapTable('load', getUsers(true));
 

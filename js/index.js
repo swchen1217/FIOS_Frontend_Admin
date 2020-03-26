@@ -769,14 +769,14 @@ function ButtonOnClickListener() {
         });
     });
     $('#order_before').click(function () {
-        var date = dayjs($('#order_info_date').val()).subtract(1, 'day');
+        var date = dayjs($('#order_info_date').val()).subtract(1, 'day').format('YYYY-MM-DD');
         $('#order_info_date').val(date);
         getOrderInfo(date).then(data => {
 
         });
     });
     $('#order_after').click(function () {
-        var date = dayjs($('#order_info_date').val()).add(1, 'day');
+        var date = dayjs($('#order_info_date').val()).add(1, 'day').format('YYYY-MM-DD');
         $('#order_info_date').val(date);
         getOrderInfo(date).then(data => {
 

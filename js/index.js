@@ -917,7 +917,6 @@ async function getOrderInfo(date) {
             card_c_body.className = "card-body";
             card_c_body.style.padding = "5px";
             var cc = g + paddingLeft(c + "", 2);
-
             for (var m = 0; m < sortM.length; m++) {
                 var row_m = document.createElement("div");
                 row_m.className = "row";
@@ -948,7 +947,6 @@ async function getOrderInfo(date) {
                     card_sm_p.style.margin = "0px";
                     var card_sm_b = document.createElement("b");
                     var card_sm_span = document.createElement("span");
-
                     card_sm_b.innerHTML = sortMS[m][sm] + ": ";
                     card_sm_span.innerHTML =
                         classData[cc] != undefined
@@ -957,7 +955,6 @@ async function getOrderInfo(date) {
                                     ? classData[cc][sortData[sortM[m]][sortMS[m][sm]]]
                                     : "0")
                             : "0";
-
                     card_sm_p.appendChild(card_sm_b);
                     card_sm_p.appendChild(card_sm_span);
                     card_sm.appendChild(card_sm_p);
@@ -966,9 +963,7 @@ async function getOrderInfo(date) {
                 }
                 card_c_body.appendChild(row_m);
             }
-
             card_c_header_h5.innerHTML = cc;
-
             card_c_header.appendChild(card_c_header_h5);
             card_c.appendChild(card_c_header);
             card_c.appendChild(card_c_body);

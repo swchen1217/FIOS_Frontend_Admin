@@ -97,7 +97,7 @@ function init() {
         uniqueId: 'order_id',
         sortName: 'order_id',
         pageNumber: 1,
-        pageSize: 5,
+        pageSize: 10,
         search: true,
         showPaginationSwitch: true,
         //detailView: true,
@@ -766,6 +766,20 @@ function ButtonOnClickListener() {
                     text: '取消'
                 }
             }
+        });
+    });
+    $('#order_before').click(function () {
+        var date = dayjs($('#order_info_date').val()).subtract(1, 'day');
+        $('#order_info_date').val(date);
+        getOrderInfo(date).then(data => {
+
+        });
+    });
+    $('#order_after').click(function () {
+        var date = dayjs($('#order_info_date').val()).add(1, 'day');
+        $('#order_info_date').val(date);
+        getOrderInfo(date).then(data => {
+
         });
     });
 }

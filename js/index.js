@@ -950,8 +950,13 @@ async function getOrderInfo(date) {
                     var card_sm_span = document.createElement("span");
 
                     card_sm_b.innerHTML = sortMS[m][sm] + ": ";
-                    //card_sm_span.innerHTML = classData[cc][sortData[m][sm]] ?? "0";
-                    card_sm_span.innerHTML = "0";
+                    card_sm_span.innerHTML =
+                        classData[cc] != undefined
+                            ? (
+                                classData[cc][sortData[sortM[m]][sortMS[m][sm]]] != undefined
+                                    ? classData[cc][sortData[sortM[m]][sortMS[m][sm]]]
+                                    : "0")
+                            : "0";
 
                     card_sm_p.appendChild(card_sm_b);
                     card_sm_p.appendChild(card_sm_span);

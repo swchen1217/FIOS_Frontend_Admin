@@ -823,10 +823,18 @@ async function getBalanceToday() {
 }
 
 async function getOrderInfo(date) {
-    var order_info = document.getElementById("order_info");
-    order_info.innerHTML = "";
     var res = request('GET', '/order/info/' + date);
+    var order_info_sale = document.getElementById("order_info_sale");
+    var order_info_class = document.getElementById("order_info_class");
     var saleData = res.data['sale'];
+    var sortData = res.data['sort'];
+    var classData = res.data['class'];
+    var sortM = Object.keys(sortData);
+    var sortMS = [];
+    for (var i = 0; i < sortM.length; i++)
+        sortMS.push(Object.keys(sortData[sortM[i]]));
+
+    order_info_sale.innerHTML = "";
     for (var i = 0; i < saleData.length; i++) {
         var col = document.createElement("div");
         col.className = "col-12 col-md-6";
@@ -887,7 +895,50 @@ async function getOrderInfo(date) {
         card.appendChild(card_body);
         col.appendChild(card);
 
-        order_info.appendChild(col);
+        order_info_sale.appendChild(col);
+    }
+
+    order_info_class.innerHTML = "";
+    for (var g = 1; g <= 3; g++) {
+        var col_g = document.createElement("div");
+        col_g.className = "col-12 col-md-4";
+        col_g.style.padding = "0px 5px";
+        for (var c = 1; c <= 19; c++) {
+            var card_c = document.createElement("div");
+            card_c.className = "card";
+            card_c.style.padding = "5px";
+            card_c.style.margin = "5px auto";
+            var card_c_header = document.createElement("div");
+            card_c_header.className = "card-header";
+            card_c_header.style.padding = "10px 20px";
+            var card_c_header_h5 = document.createElement("h5");
+            card_c_header_h5.style.marginBottom = "2px";
+            var card_c_body = document.createElement("div");
+            card_c_body.className = "card-body";
+            card_c_body.style.padding = "5px";
+
+            for (var m = 0; m < sortM.length; m++) {
+                var row_m = document.createElement("div");
+                row_m.className = "row";
+                if (m != sortM.length - 1)
+                    row_m.style.marginBottom = "5px";
+                
+            }
+
+            card_c_header_h5.innerHTML = g + paddingLeft(c + "", 2);
+
+            card_c_header.appendChild(card_c_header_h5);
+            col_g.appendChild(card_c_header);
+            col_g.appendChild(card_c_body);
+        }
+        order_info_class.appendChild(col_g);
     }
     return true;
+}
+
+function paddingLeft(str, lenght) {
+    if (str.length >= lenght)
+        return str;
+    else
+        return paddingLeft("0" + str, lenght);
 }

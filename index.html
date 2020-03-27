@@ -151,6 +151,48 @@
                 <div class="modal-body">
                     <img id="img-show_dish_photo" width="750" style="margin: auto;display: block">
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn_dish_edit"
+                            onclick="$('#modal-show_dish_photo').modal('hide');$('#modal-edit_dish_photo').modal('show');">
+                        修改圖片
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-xl" tabindex="-1" id="modal-edit_dish_photo">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">修改餐點照片</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row justify-content-between align-items-end">
+                        <div class="col-8">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">URL</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="餐點圖片URL" id="dish_photo_URL" oninput="dishPhotoSubmitCheck()">
+                            </div>
+                            <p style="margin-left: 30px">OR</p>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="dish_photo_upload" accept="image/*"
+                                       onchange="dishPhotoSubmitCheck()">
+                                <label class="custom-file-label" for="dish_photo_upload">Choose file</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-2">
+                            <button type="button" class="btn btn-default btn-primary btn-block"
+                                    id="btn_dish_photo_submit" disabled>上傳
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -164,17 +206,7 @@
                 <table id="table_dish"></table>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">修改餐點</h3>
-                    </div>
-                    <div class="card-body">
-
-                    </div>
-                </div>
-            </div>
+        <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
@@ -199,13 +231,13 @@
             <div class="col-6 col-sm-6 col-md-3 col-lg-2" style="padding: 10px 15px">
                 <a class="btn btn-primary btn-block" data-toggle="collapse" href="#order_info_sale"
                    style="height: 42px">
-                    販賣
+                    餐點統計
                 </a>
             </div>
             <div class="col-6 col-sm-6 col-md-3 col-lg-2" style="padding: 10px 15px">
                 <a class="btn btn-primary btn-block" data-toggle="collapse" href="#order_info_class"
                    style="height: 42px">
-                    班級
+                    班級訂單
                 </a>
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-4">
@@ -215,7 +247,8 @@
                             <button class="btn btn-outline-secondary" type="button" id="order_before"><i
                                     class="fas fa-angle-double-left"></i></button>
                         </div>
-                        <input type="text" class="form-control" placeholder="Date" disabled id="order_info_date">
+                        <input type="text" class="form-control" placeholder="Date" disabled id="order_info_date"
+                               readonly>
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" id="order_after"><i
                                     class="fas fa-angle-double-right"></i></button>
@@ -629,6 +662,10 @@
         window.addEventListener('hashchange', OnHashchangeListener);
         FormSubmitListener();
         ButtonOnClickListener();
+
+        $(".custom-file-input").change(function () {
+            $(this).next(".custom-file-label").html($(this).val().split("\\").pop());
+        });
     });
 </script>
 </html>

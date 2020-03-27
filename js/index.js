@@ -50,7 +50,9 @@ function init() {
         columns: [{
             field: 'id',
             title: 'ID',
-            //formatter: LinkFormatterCM
+            formatter: function (value, row, index) {
+                return "<a href='#DishManage'>" + value + "</a>";
+            }
         }, {
             field: 'name',
             title: '名稱'
@@ -330,6 +332,7 @@ function login_check() {
 }
 
 function PermissionCheck(needAdmin, isAlert) {
+    // TODO
     HideAlert();
     /*var hasAdmin = $.cookie("LoginInfoAdmin");
     if ((needAdmin && hasAdmin == '1') || needAdmin != true) {

@@ -281,7 +281,7 @@ function OnHashchangeListener() {
         $('#Content_UserManage').show();
         $("#title_bar").hide();
 
-        ShowAlart('alert-warning', '尚未開放!!!', false, false);
+        ShowAlart('alert-warning', '尚未開放!!請直接聯繫開發團隊!!!', false, false);
 
         /*$('#table_user').bootstrapTable('load', getUsers(true));
 
@@ -802,7 +802,77 @@ function ButtonOnClickListener() {
                 return false;
             }
         } else {
-
+            var file_data = $('#dish_photo_upload').prop('files')[0];
+            var form_data = new FormData();
+            form_data.append('type', 'image');
+            form_data.append('image', file_data);
+            var pb = $.dialog({
+                title: '資料同步中',
+                content: '<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"style="width: 100%"></div></div>',
+                closeIcon: false,
+                columnClass: 'medium',
+                lazyOpen: true,
+            });
+            var responses = null;
+            $.ajax({
+                url: config['backend_URL'] + '/dish/image/' + dish_upload_photo_id,
+                data: form_data,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                beforeSend: function (xhr) {
+                    pb.open();
+                    xhr.setRequestHeader("Authorization", 'Bearer ' + $.cookie('access_token'));
+                },
+                async: false,
+                complete: function (xhr) {
+                    responses = xhr;
+                    pb.close();
+                }
+            });
+            if (Math.floor(responses.status / 100) == 5) {
+                $.alert({
+                    title: '錯誤',
+                    content: '系統發生錯誤!!請聯繫管理員',
+                    type: 'red',
+                    typeAnimated: true
+                });
+            }
+            if (responses.status == 401) {
+                $.alert({
+                    title: '錯誤',
+                    content: '使用者驗證錯誤!!請重新登入',
+                    type: 'red',
+                    typeAnimated: true
+                });
+            }
+            if (responses.status == 403) {
+                $.alert({
+                    title: '錯誤',
+                    content: '權限不足!!!',
+                    type: 'red',
+                    typeAnimated: true
+                });
+            }
+            console.log(responses);
+            if (responses.status == 204) {
+                $.alert({
+                    title: '成功',
+                    content: '上傳成功，重新整理以查看新照片!!',
+                    type: 'green',
+                    typeAnimated: true
+                });
+                $('#modal-edit_dish_photo').modal('hide');
+            }
+            if (responses.status == 400) {
+                $.alert({
+                    title: '錯誤',
+                    content: '上傳失敗!!',
+                    type: 'red',
+                    typeAnimated: true
+                });
+                return false;
+            }
         }
     });
 }

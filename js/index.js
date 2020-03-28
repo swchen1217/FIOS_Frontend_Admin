@@ -49,10 +49,7 @@ function init() {
         },
         columns: [{
             field: 'id',
-            title: 'ID',
-            formatter: function (value, row, index) {
-                return "<a href='#DishManage'>" + value + "</a>";
-            }
+            title: 'ID'
         }, {
             field: 'name',
             title: '名稱'

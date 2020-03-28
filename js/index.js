@@ -559,10 +559,10 @@ function FormSubmitListener() {
         var name = $('#newdish-InputName').val();
         var manufacturer_id = $('#newdish-InputManufacturer').val();
         var price = $('#newdish-InputPrice').val();
-        var calories = $('#newdish-InputName').val();
-        var protein = $('#newdish-InputName').val();
-        var fat = $('#newdish-InputName').val();
-        var carbohydrate = $('#newdish-InputName').val();
+        var calories = $('#newdish-InputCalories').val();
+        var protein = $('#newdish-InputProtein').val();
+        var fat = $('#newdish-InputFat').val();
+        var carbohydrate = $('#newdish-InputCarbohydrate').val();
         var contents = [];
         for (var i = 0; i < newdish_InputContentRow; i++) {
             var content = $('#newdish-InputContent_' + i).val();
@@ -605,10 +605,10 @@ function FormSubmitListener() {
                                 $('#newdish-InputName').val('');
                                 $('#newdish-InputManufacturer').val(null);
                                 $('#newdish-InputPrice').val('');
-                                $('#newdish-InputName').val('');
-                                $('#newdish-InputName').val('');
-                                $('#newdish-InputName').val('');
-                                $('#newdish-InputName').val('');
+                                $('#newdish-InputCalories').val('');
+                                $('#newdish-InputProtein').val('');
+                                $('#newdish-InputFat').val('');
+                                $('#newdish-InputCarbohydrate').val('');
                                 newdish_InputContentRow = 0;
                                 var input = document.createElement("input");
                                 input.type = "text";

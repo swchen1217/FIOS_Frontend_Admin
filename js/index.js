@@ -616,6 +616,9 @@ function FormSubmitListener() {
                                 var div = document.getElementById("newdish-Content");
                                 div.innerHTML = input.outerHTML;
                                 ShowAlart('alert-success', '餐點新增成功', false, true);
+                                getDishList().then(data => {
+                                    $('#table_dish').bootstrapTable('load', data);
+                                });
                             }
                             if (res.code == 400) {
                                 if (res.data['error'] == 'The request is incomplete') {

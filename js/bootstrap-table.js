@@ -5769,7 +5769,7 @@
 	      var _this16 = this;
 
 	      // horizontal scroll event
-	      // TODO: it's probably better improving the layout than binding to scroll event
+	      // TOD0: it's probably better improving the layout than binding to scroll event
 	      this.$tableBody.off('scroll').on('scroll', function (_ref6) {
 	        var currentTarget = _ref6.currentTarget;
 

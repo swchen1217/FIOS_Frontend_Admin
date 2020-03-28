@@ -233,7 +233,7 @@
                             </div>
                             <div class="form-group">
                                 <label>營養標示</label>
-                                <div class="row">
+                                <div class="row" style="padding: 0px 10px">
                                     <div class="col-6">
                                         <label for="newdish-InputCalories">熱量</label>
                                         <input type="number" class="form-control" id="newdish-InputCalories"
@@ -260,24 +260,17 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="newclub-InputIsSpecial">特殊社團</label>
-                                <div class="form-row">
-                                    <span style="font-size: 1.2em;line-height: 32px">否&nbsp;</span>
-                                    <label class="switch" style="vertical-align: top">
-                                        <input type="checkbox" id="newclub-InputIsSpecial">
-                                        <span class="slider round"></span>
-                                    </label>
-                                    <span style="font-size: 1.2em;line-height: 32px">&nbsp;是</span>
+                                <label>內容物</label>
+                                <div id="newdish-Content">
+                                    <input type="text" class="form-control" placeholder="輸入內容物"
+                                           style="margin-bottom: 5px" id="newdish-InputContent_0">
                                 </div>
+                                <span onclick="addNewDishContentRow()"
+                                      style="font-size: 26px;margin-left: 15px;opacity:0.7">
+                                        <i class="far fa-plus-square"></i>
+                                </span>
                             </div>
-                            <div class="form-group">
-                                <label for="newclub-InputMaxP">人數限制</label>
-                                <input type="text" class="form-control" id="newclub-InputMaxP" placeholder="輸入人數限制"
-                                       required>
-                            </div>
-
                             <div class="row justify-content-end">
                                 <div class="col-4">
                                     <button type="submit" class="btn btn-default btn-primary btn-block"

@@ -348,16 +348,18 @@ function PermissionCheck(needAdmin, isAlert) {
     return true;
 }
 
+var dish_upload_photo_id;
+
 window.operateEvents = {
     // e      Event
     // value  undefined
     // row    rowdata
     // index  row
     'click #btn_show_photo': function (e, value, row, index) {
-        console.log(row['photo']);
+        console.log(row);
         $('#img-show_dish_photo').prop('src', row['photo']);
         $('#modal-show_dish_photo').modal('show');
-        //todo
+        dish_upload_photo_id = row['id'];
     }
 };
 
@@ -776,6 +778,32 @@ function ButtonOnClickListener() {
         getOrderInfo(date).then(data => {
 
         });
+    });
+    $('#btn_dish_photo_submit').click(function () {
+        if ($('#dish_photo_URL').val() != "") {
+            var data = {type: 'url', url: $('#dish_photo_URL').val()};
+            var res = request('POST', '/dish/image/' + dish_upload_photo_id, data);
+            if (res.code == 204) {
+                $.alert({
+                    title: '成功',
+                    content: '上傳成功，重新整理以查看新照片!!',
+                    type: 'green',
+                    typeAnimated: true
+                });
+                $('#modal-edit_dish_photo').modal('hide');
+            }
+            if (res.code == 400) {
+                $.alert({
+                    title: '錯誤',
+                    content: '上傳失敗!!',
+                    type: 'red',
+                    typeAnimated: true
+                });
+                return false;
+            }
+        } else {
+
+        }
     });
 }
 

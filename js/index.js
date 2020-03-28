@@ -619,7 +619,6 @@ function FormSubmitListener() {
                                 var div = document.getElementById("newdish-Content");
                                 div.innerHTML = input.outerHTML;
                                 ShowAlart('alert-success', '餐點新增成功', false, true);
-                                return false;
                             }
                             if (res.code == 400) {
                                 if (res.data['error'] == 'The request is incomplete') {
@@ -646,7 +645,6 @@ function FormSubmitListener() {
                                         typeAnimated: true
                                     });
                                 }
-                                return false;
                             }
                         }
                     },

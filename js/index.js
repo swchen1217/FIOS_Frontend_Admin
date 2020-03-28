@@ -844,7 +844,7 @@ async function getOrderInfo(date) {
         sortMS.push(Object.keys(sortData[sortM[i]]));
 
     order_info_sale.innerHTML = "";
-    if(saleData.length==0){
+    if (saleData.length == 0) {
         var alert = document.createElement("div");
         alert.className = "alert alert-warning";
         alert.style.marginTop = "16px";
@@ -1004,11 +1004,11 @@ function paddingLeft(str, lenght) {
 }
 
 function dishPhotoSubmitCheck() {
-    if($("#dish_photo_upload").val().split("\\").pop() != "")
+    if ($("#dish_photo_upload").val().split("\\").pop() != "")
         $('#dish_photo_URL').prop('disabled', true);
     else
         $('#dish_photo_URL').prop('disabled', false);
-    if($('#dish_photo_URL').val() != "")
+    if ($('#dish_photo_URL').val() != "")
         $('#dish_photo_upload').prop('disabled', true);
     else
         $('#dish_photo_upload').prop('disabled', false);

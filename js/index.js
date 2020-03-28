@@ -556,8 +556,113 @@ function FormSubmitListener() {
         return false;
     });
     $('#form-newdish').submit(function () {
-        HideAlert();
+        var name = $('#newdish-InputName').val();
+        var manufacturer_id = $('#newdish-InputManufacturer').val();
+        var price = $('#newdish-InputPrice').val();
+        var calories = $('#newdish-InputName').val();
+        var protein = $('#newdish-InputName').val();
+        var fat = $('#newdish-InputName').val();
+        var carbohydrate = $('#newdish-InputName').val();
+        var contents = [];
+        for (var i = 0; i < newdish_InputContentRow; i++) {
+            var content = $('#newdish-InputContent_' + i).val();
+            if (content != "")
+                contents.push(content);
+        }
 
+        if (name != "" && manufacturer_id != null && price != "") {
+            manufacturer_id = parseInt(manufacturer_id);
+            price = parseInt(price);
+            if (calories == "")
+                calories = 0;
+            if (protein == "")
+                protein = 0;
+            if (fat == "")
+                fat = 0;
+            if (carbohydrate == "")
+                carbohydrate = 0;
+            $.confirm({
+                title: '新增餐點!!',
+                content: '確認新增此餐點??',
+                buttons: {
+                    confirm: {
+                        text: '確認',
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            HideAlert();
+                            var data = {
+                                name: name,
+                                manufacturer_id: manufacturer_id,
+                                price: price,
+                                calories: calories,
+                                protein: protein,
+                                fat: fat,
+                                carbohydrate: carbohydrate,
+                                contents: contents
+                            };
+                            var res = request('POST', '/dish', data);
+                            if (res.code == 201) {
+                                $('#newdish-InputName').val('');
+                                $('#newdish-InputManufacturer').val(null);
+                                $('#newdish-InputPrice').val('');
+                                $('#newdish-InputName').val('');
+                                $('#newdish-InputName').val('');
+                                $('#newdish-InputName').val('');
+                                $('#newdish-InputName').val('');
+                                newdish_InputContentRow = 0;
+                                var input = document.createElement("input");
+                                input.type = "text";
+                                input.className = "form-control";
+                                input.id = "newdish-InputContent_0";
+                                input.placeholder = "輸入內容物";
+                                input.style.marginBottom = "5px";
+                                var div = document.getElementById("newdish-Content");
+                                div.innerHTML = input.outerHTML;
+                                ShowAlart('alert-success', '餐點新增成功', false, true);
+                                return false;
+                            }
+                            if (res.code == 400) {
+                                if (res.data['error'] == 'The request is incomplete') {
+                                    $.alert({
+                                        title: '錯誤',
+                                        content: '輸入不完整!!',
+                                        type: 'red',
+                                        typeAnimated: true
+                                    });
+                                }
+                                if (res.data['error'] == 'The manufacturer_id error') {
+                                    $.alert({
+                                        title: '錯誤',
+                                        content: '廠商編號錯誤!!',
+                                        type: 'red',
+                                        typeAnimated: true
+                                    });
+                                }
+                                if (res.data['error'] == '`price` must unsigned') {
+                                    $.alert({
+                                        title: '錯誤',
+                                        content: '售價不可為負!!',
+                                        type: 'red',
+                                        typeAnimated: true
+                                    });
+                                }
+                                return false;
+                            }
+                        }
+                    },
+                    cancel: {
+                        text: '取消'
+                    }
+                }
+            });
+        } else {
+            $.alert({
+                title: '錯誤',
+                content: '輸入不完整!!',
+                type: 'red',
+                typeAnimated: true
+            });
+        }
         return false;
     });
 }

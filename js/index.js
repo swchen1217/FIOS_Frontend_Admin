@@ -82,11 +82,13 @@ function init() {
             title: '販售',
             width: 70,
             formatter: '<button id="btn_sale" class="btn btn-primary">販售</button>',
+            events: operateEvents
         }, {
             field: 'delete',
             title: '刪除',
             width: 70,
             formatter: '<button id="btn_dish_delete" class="btn btn-danger">刪除</button>',
+            events: operateEvents
         }]
     });
     $('#table_order').bootstrapTable({
@@ -128,6 +130,7 @@ function init() {
             title: '刪除',
             width: 70,
             formatter: '<button id="btn_order_delete" class="btn btn-danger">刪除</button>',
+            events: operateEvents
         }]
     });
     $('#table_sale').bootstrapTable({
@@ -171,6 +174,7 @@ function init() {
             title: '刪除',
             width: 70,
             formatter: '<button id="btn_dish_delete" class="btn btn-danger">刪除</button>',
+            events: operateEvents
         }]
     });
     $('#table_balance_log').bootstrapTable({
@@ -364,7 +368,7 @@ window.operateEvents = {
         console.log(row);
         $.confirm({
             title: '確認刪除!!',
-            content: '即將刪除餐點',
+            content: '即將刪除餐點<br><b>若餐點 <i>販賣中</i> 將會造成嚴重影響</b>',
             type: 'red',
             autoClose: 'cancel|10000',
             buttons: {

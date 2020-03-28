@@ -359,6 +359,44 @@ window.operateEvents = {
         $('#img-show_dish_photo').prop('src', row['photo']);
         $('#modal-show_dish_photo').modal('show');
         dish_upload_photo_id = row['id'];
+    },
+    'click #btn_dish_delete': function (e, value, row, index) {
+        console.log(row);
+        $.confirm({
+            title: '確認刪除!!',
+            content: '即將刪除餐點',
+            type: 'red',
+            autoClose: 'cancel|10000',
+            buttons: {
+                confirm: {
+                    text: '刪除',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        HideAlert();
+                        var res = request('DELETE', '/dish/' + row['id'], null);
+                        if (res.code == 204) {
+                            ShowAlart('alert-success', '餐點已刪除', false, true);
+                            getDishList().then(data => {
+                                $('#table_dish').bootstrapTable('load', data);
+                            });
+                        }
+                        if (res.code == 404) {
+                            if (res.data['error'] == 'The Dish Not Found') {
+                                $.alert({
+                                    title: '錯誤',
+                                    content: '餐點錯誤!!',
+                                    type: 'red',
+                                    typeAnimated: true
+                                });
+                            }
+                        }
+                    }
+                },
+                cancel: {
+                    text: '取消'
+                },
+            }
+        });
     }
 };
 

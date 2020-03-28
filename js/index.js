@@ -1115,3 +1115,17 @@ function dishPhotoSubmitCheck() {
     else
         $("#btn_dish_photo_submit").prop('disabled', true);
 }
+
+var newdish_InputContentRow = 0;
+
+function addNewDishContentRow() {
+    newdish_InputContentRow++;
+    var new_input = document.createElement("input");
+    new_input.type = "text";
+    new_input.className = "form-control";
+    new_input.id = "newdish-InputContent_" + newdish_InputContentRow;
+    new_input.placeholder = "輸入內容物";
+    new_input.style.marginBottom = "5px";
+    var div = document.getElementById("newdish-Content");
+    div.appendChild(new_input);
+}

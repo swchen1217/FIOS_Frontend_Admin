@@ -235,6 +235,8 @@ function OnHashchangeListener() {
         $('#Content_DishManage').show();
         $("#title_bar").hide();
 
+        initManufacturerSelect();
+
         getDishList().then(data => {
             $('#table_dish').bootstrapTable('load', data);
         });
@@ -551,6 +553,11 @@ function FormSubmitListener() {
                 }
             }
         }
+        return false;
+    });
+    $('#form-newdish').submit(function () {
+        HideAlert();
+
         return false;
     });
 }
@@ -1128,4 +1135,15 @@ function addNewDishContentRow() {
     new_input.style.marginBottom = "5px";
     var div = document.getElementById("newdish-Content");
     div.appendChild(new_input);
+}
+
+function initManufacturerSelect() {
+    var res = request('GET', '/manufacturer', null, false);
+    for (var i = 0; i < res.data.length; i++) {
+        var option = document.createElement("option");
+        option.value = res.data[i]['id'];
+        option.innerHTML = res.data[i]['name'];
+        var select = document.getElementById("newdish-InputManufacturer");
+        select.appendChild(option);
+    }
 }

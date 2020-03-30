@@ -173,7 +173,7 @@ function init() {
             field: 'delete',
             title: '刪除',
             width: 70,
-            formatter: '<button id="btn_dish_delete" class="btn btn-danger">刪除</button>',
+            formatter: '<button id="btn_sale_delete" class="btn btn-danger">刪除</button>',
             events: operateEvents
         }]
     });
@@ -404,6 +404,88 @@ window.operateEvents = {
     'click #btn_sale': function (e, value, row, index) {
         $('#modal-create_sale').modal('show');
         dish_sale_dish_id = row['id'];
+    },
+    'click #btn_sale_delete': function (e, value, row, index) {
+        $.confirm({
+            title: '確認刪除!!',
+            content: '即將刪除販賣<br><b>若已有訂單，將會造成嚴重影響</b>',
+            type: 'red',
+            autoClose: 'cancel|10000',
+            buttons: {
+                confirm: {
+                    text: '刪除',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        HideAlert();
+                        var res = request('DELETE', '/sale/' + row['id'], null);
+                        if (res.code == 204) {
+                            ShowAlart('alert-success', '販售已刪除', false, true);
+                            getSaleList().then(data => {
+                                $('#table_sale').bootstrapTable('load', data);
+                            });
+                        }
+                        if (res.code == 404) {
+                            if (res.data['error'] == 'The Sale Not Found') {
+                                $.alert({
+                                    title: '錯誤',
+                                    content: '販售ID錯誤!!',
+                                    type: 'red',
+                                    typeAnimated: true
+                                });
+                            }
+                        }
+                    }
+                },
+                cancel: {
+                    text: '取消'
+                },
+            }
+        });
+    },
+    'click #btn_order_delete': function (e, value, row, index) {
+        $.confirm({
+            title: '確認刪除!!',
+            content: '即將刪除訂單',
+            type: 'red',
+            autoClose: 'cancel|10000',
+            buttons: {
+                confirm: {
+                    text: '刪除',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        HideAlert();
+                        var res = request('DELETE', '/order/' + row['order_id'], null);
+                        if (res.code == 200) {
+                            $.alert({
+                                title: '成功',
+                                content: '<b>刪除成功</b><br>' + res.data['before'] + '-' + res.data['total'] + '=' + res.data['after'],
+                                type: 'green',
+                                typeAnimated: true
+                            });
+                            getOrderList().then(data => {
+                                $('#table_order').bootstrapTable('load', data);
+                            });
+                            getOrderInfo($('#order_info_date').val()).then(data => {
+
+                            });
+                        }
+                        if (res.code == 400) {
+                            if (res.data['error'] == 'Sales time has passed') {
+                                $.alert({
+                                    title: '錯誤',
+                                    content: '已超過刪除期限!!',
+                                    type: 'red',
+                                    typeAnimated: true
+                                });
+                            }
+                        }
+                    }
+                },
+                cancel: {
+                    text: '取消'
+                },
+            }
+        });
     },
 };
 

@@ -33,6 +33,9 @@
     <link href="css/NotoSansTC400ChineseTraditional.css" rel="stylesheet">
     <!-- jwt-decode -->
     <script src="js/jwt-decode.min.js"></script>
+    <!-- jQuery UI -->
+    <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!-- My CSS -->
     <link rel="stylesheet" href="css/index.css">
@@ -193,6 +196,28 @@
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="modal-create_sale">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">建立新販售</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="input_sale_date">販售日期</label>
+                    <input type="text" class="form-control" placeholder="選擇日期" id="input_sale_date">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn_create_sale">
+                        送出
+                    </button>
                 </div>
             </div>
         </div>
@@ -727,6 +752,10 @@
 
         $(".custom-file-input").change(function () {
             $(this).next(".custom-file-label").html($(this).val().split("\\").pop());
+        });
+
+        $("#input_sale_date").datepicker({
+            dateFormat: "yy-mm-dd"
         });
     });
 </script>

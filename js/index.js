@@ -1118,12 +1118,13 @@ function ButtonOnClickListener() {
             var data = {sale_at: date, dish_id: dish_sale_dish_id, status: 1};
             var res = request('POST', '/sale', data);
             if (res.code == 201) {
-                $.alert({
+                /*$.alert({
                     title: '成功',
                     content: '販售建立成功!!',
                     type: 'green',
                     typeAnimated: true
-                });
+                });*/
+				ShowAlart('alert-success', '販售建立成功', false, true);
                 $('#modal-create_sale').modal('hide');
             }
             if (res.code == 400) {

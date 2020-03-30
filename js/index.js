@@ -352,6 +352,7 @@ function PermissionCheck(needAdmin, isAlert) {
 }
 
 var dish_upload_photo_id;
+var dish_sale_dish_id;
 
 window.operateEvents = {
     // e      Event
@@ -359,13 +360,11 @@ window.operateEvents = {
     // row    rowdata
     // index  row
     'click #btn_show_photo': function (e, value, row, index) {
-        console.log(row);
         $('#img-show_dish_photo').prop('src', row['photo']);
         $('#modal-show_dish_photo').modal('show');
         dish_upload_photo_id = row['id'];
     },
     'click #btn_dish_delete': function (e, value, row, index) {
-        console.log(row);
         $.confirm({
             title: '確認刪除!!',
             content: '即將刪除餐點<br><b>若餐點 <i>販賣中</i> 將會造成嚴重影響</b>',
@@ -401,7 +400,11 @@ window.operateEvents = {
                 },
             }
         });
-    }
+    },
+    'click #btn_sale': function (e, value, row, index) {
+        $('#modal-create_sale').modal('show');
+        dish_sale_dish_id = row['id'];
+    },
 };
 
 function FormSubmitListener() {
@@ -1025,6 +1028,49 @@ function ButtonOnClickListener() {
                 });
                 return false;
             }
+        }
+    });
+    $('#btn_create_sale').click(function () {
+        var date = $('#input_sale_date').val();
+        if (date != "") {
+            var data = {sale_at: date, dish_id: dish_sale_dish_id, status: 1};
+            var res = request('POST', '/sale', data);
+            if (res.code == 201) {
+                $.alert({
+                    title: '成功',
+                    content: '販售建立成功!!',
+                    type: 'green',
+                    typeAnimated: true
+                });
+                $('#modal-create_sale').modal('hide');
+            }
+            if (res.code == 400) {
+                if (res.data['error'] == "Sales time has passed") {
+                    $.alert({
+                        title: '錯誤',
+                        content: '販賣日期已過!!',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }
+            }
+            if (res.code == 404) {
+                if (res.data['error'] == "The Dish Not Found") {
+                    $.alert({
+                        title: '錯誤',
+                        content: '餐點ID錯誤!!',
+                        type: 'red',
+                        typeAnimated: true
+                    });
+                }
+            }
+        } else {
+            $.alert({
+                title: '錯誤',
+                content: '日期不可為空!!',
+                type: 'red',
+                typeAnimated: true
+            });
         }
     });
 }

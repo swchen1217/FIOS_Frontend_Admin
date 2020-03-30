@@ -1124,7 +1124,7 @@ function ButtonOnClickListener() {
                     type: 'green',
                     typeAnimated: true
                 });*/
-				ShowAlart('alert-success', '販售建立成功', false, true);
+				ShowAlart('alert-success', '販售建立成功,販售ID:'+res.data['id'], false, true);
                 $('#modal-create_sale').modal('hide');
             }
             if (res.code == 400) {

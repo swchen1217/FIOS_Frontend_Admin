@@ -11,6 +11,8 @@ function init() {
             return false;
         }
     });
+	
+	initManufacturerSelect();
 
     $('#table_dish').bootstrapTable({
         dataType: "json",
@@ -235,8 +237,6 @@ function OnHashchangeListener() {
     if (hash == '#DishManage' && login_check() && PermissionCheck(false, true)) {
         $('#Content_DishManage').show();
         $("#title_bar").hide();
-
-        initManufacturerSelect();
 
         getDishList().then(data => {
             $('#table_dish').bootstrapTable('load', data);

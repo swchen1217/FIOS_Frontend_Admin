@@ -224,7 +224,7 @@
     </div>
 
     <div id="Content_Home">
-        Home
+
     </div>
     <div id="Content_DishManage">
         <div class="row" id="row-dish-list">
@@ -322,6 +322,23 @@
         </div>
     </div>
     <div id="Content_SaleManage">
+        <div class="row justify-content-center" style="margin-top: 10px">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                <div class="card" style="border-color: #acbfd4;border-width: 2px;padding: 10px 15px;margin: 0px">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button" id="sale_before"><i
+                                    class="fas fa-angle-double-left"></i></button>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Date" id="sale_date" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="sale_after"><i
+                                    class="fas fa-angle-double-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row" id="row-sale-list">
             <div class="container">
                 <table id="table_sale"></table>

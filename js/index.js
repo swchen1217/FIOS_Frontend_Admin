@@ -1,6 +1,15 @@
 var user;
 
 function init() {
+    $("#mNav .nav a").on("click", function () {
+        $("#mNav .nav").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        $("#navbarToggler").collapse('hide');
+    });
+    $(".custom-file-input").change(function () {
+        $(this).next(".custom-file-label").html($(this).val().split("\\").pop());
+    });
+
     if ($.cookie('access_token') != undefined)
         user = jwt_decode($.cookie('access_token'))['user'];
 
@@ -13,6 +22,21 @@ function init() {
     });
 
     initManufacturerSelect();
+
+    $(".custom-file-input").change(function () {
+        $(this).next(".custom-file-label").html($(this).val().split("\\").pop());
+    });
+
+    $("#input_sale_date").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+
+    $("#order_info_date").datepicker({
+        dateFormat: "yy-mm-dd",
+        onSelect: function (dateText) {
+            orderDisplay(dateText);
+        }
+    });
 
     $('#table_dish').bootstrapTable({
         dataType: "json",
@@ -255,14 +279,7 @@ function OnHashchangeListener() {
         $("#title_bar").hide();
 
         var date = dayjs().format('YYYY-MM-DD');
-        $('#order_info_date').val(date);
-        getOrderInfo(date).then(data => {
-
-        });
-
-        getOrderList().then(data => {
-            $('#table_order').bootstrapTable('load', data);
-        });
+        orderDisplay(date);
     }
     if (hash == '#BalanceManage' && login_check() && PermissionCheck(true, true)) {
         $('#Content_BalanceManage').show();
@@ -1004,17 +1021,11 @@ function ButtonOnClickListener() {
     });
     $('#order_before').click(function () {
         var date = dayjs($('#order_info_date').val()).subtract(1, 'day').format('YYYY-MM-DD');
-        $('#order_info_date').val(date);
-        getOrderInfo(date).then(data => {
-
-        });
+        orderDisplay(date);
     });
     $('#order_after').click(function () {
         var date = dayjs($('#order_info_date').val()).add(1, 'day').format('YYYY-MM-DD');
-        $('#order_info_date').val(date);
-        getOrderInfo(date).then(data => {
-
-        });
+        orderDisplay(date);
     });
     $('#btn_dish_photo_submit').click(function () {
         if ($('#dish_photo_URL').val() != "") {
@@ -1171,8 +1182,8 @@ async function getDishList() {
     return res.data;
 }
 
-async function getOrderList() {
-    var res = request('GET', '/order');
+async function getOrderList(date) {
+    var res = request('GET', '/order/date/' + date);
     if (res.code == 404) {
         $.alert({
             title: '錯誤',
@@ -1420,4 +1431,14 @@ function initManufacturerSelect() {
         var select = document.getElementById("newdish-InputManufacturer");
         select.appendChild(option);
     }
+}
+
+function orderDisplay(date) {
+    $('#order_info_date').val(date);
+    getOrderInfo(date).then(data => {
+
+    });
+    getOrderList(date).then(data => {
+        $('#table_order').bootstrapTable('load', data);
+    });
 }

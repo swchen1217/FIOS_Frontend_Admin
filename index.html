@@ -349,8 +349,7 @@
                             <button class="btn btn-outline-secondary" type="button" id="order_before"><i
                                     class="fas fa-angle-double-left"></i></button>
                         </div>
-                        <input type="text" class="form-control" placeholder="Date" disabled id="order_info_date"
-                               readonly>
+                        <input type="text" class="form-control" placeholder="Date" id="order_info_date" readonly>
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" id="order_after"><i
                                     class="fas fa-angle-double-right"></i></button>
@@ -749,29 +748,10 @@
 <script>
     $(document).ready(function () {
         init();
-
-        $("#mNav .nav a").on("click", function () {
-            $("#mNav .nav").find(".active").removeClass("active");
-            $(this).parent().addClass("active");
-            $("#navbarToggler").collapse('hide');
-        });
-        $(".custom-file-input").change(function () {
-            $(this).next(".custom-file-label").html($(this).val().split("\\").pop());
-        });
-
         OnHashchangeListener();
-
         window.addEventListener('hashchange', OnHashchangeListener);
         FormSubmitListener();
         ButtonOnClickListener();
-
-        $(".custom-file-input").change(function () {
-            $(this).next(".custom-file-label").html($(this).val().split("\\").pop());
-        });
-
-        $("#input_sale_date").datepicker({
-            dateFormat: "yy-mm-dd"
-        });
     });
 </script>
 </html>

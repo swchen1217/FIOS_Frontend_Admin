@@ -38,6 +38,15 @@ function init() {
         }
     });
 
+    $("#sale_date").datepicker({
+        dateFormat: "yy-mm-dd",
+        onSelect: function (dateText) {
+            getSaleList(dateText).then(data => {
+                $('#table_sale').bootstrapTable('load', data);
+            });
+        }
+    });
+
     $('#table_dish').bootstrapTable({
         dataType: "json",
         classes: "table table-bordered table-striped table-sm",
@@ -270,7 +279,9 @@ function OnHashchangeListener() {
         $('#Content_SaleManage').show();
         $("#title_bar").hide();
 
-        getSaleList().then(data => {
+        var date = dayjs().format('YYYY-MM-DD');
+        $('#sale_date').val(date);
+        getSaleList(date).then(data => {
             $('#table_sale').bootstrapTable('load', data);
         });
     }
@@ -1027,6 +1038,20 @@ function ButtonOnClickListener() {
         var date = dayjs($('#order_info_date').val()).add(1, 'day').format('YYYY-MM-DD');
         orderDisplay(date);
     });
+    $('#sale_before').click(function () {
+        var date = dayjs($('#sale_date').val()).subtract(1, 'day').format('YYYY-MM-DD');
+        $('#sale_date').val(date);
+        getSaleList(date).then(data => {
+            $('#table_sale').bootstrapTable('load', data);
+        });
+    });
+    $('#sale_after').click(function () {
+        var date = dayjs($('#sale_date').val()).add(1, 'day').format('YYYY-MM-DD');
+        $('#sale_date').val(date);
+        getSaleList(date).then(data => {
+            $('#table_sale').bootstrapTable('load', data);
+        });
+    });
     $('#btn_dish_photo_submit').click(function () {
         if ($('#dish_photo_URL').val() != "") {
             var data = {type: 'url', url: $('#dish_photo_URL').val()};
@@ -1195,8 +1220,8 @@ async function getOrderList(date) {
     return res.data;
 }
 
-async function getSaleList() {
-    var res = request('GET', '/sale');
+async function getSaleList(date) {
+    var res = request('GET', '/sale/date/' + date);
     if (res.code == 404) {
         $.alert({
             title: '錯誤',

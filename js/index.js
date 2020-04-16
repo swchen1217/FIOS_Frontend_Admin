@@ -1192,6 +1192,22 @@ function ButtonOnClickListener() {
             });
         }
     });
+    $('#btn_order_export').click(function () {
+        var date = $('#order_info_date').val();
+        var res = request('GET', '/export/order/' + date, null);
+        if (res.code == 200) {
+            window.open(res.data['url']);
+        }
+        if (res.code == 400) {
+            $.alert({
+                title: '錯誤',
+                content: '日期格式不符!!',
+                type: 'red',
+                typeAnimated: true
+            });
+            return false;
+        }
+    });
 }
 
 async function getDishList() {

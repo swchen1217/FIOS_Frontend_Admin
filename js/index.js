@@ -47,6 +47,14 @@ function init() {
         }
     });
 
+    $("#input_total_start").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+
+    $("#input_total_end").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+
     $('#table_dish').bootstrapTable({
         dataType: "json",
         classes: "table table-bordered table-striped table-sm",
@@ -818,6 +826,35 @@ function FormSubmitListener() {
         }
         return false;
     });
+    $('#form-total').submit(function () {
+        var startDate = $('#input_total_start').val();
+        var endDate = $('#input_total_end').val();
+        if (startDate != '' && endDate != '') {
+            var res = request('GET', '/order/total/' + startDate + '/' + endDate, null);
+            if (res.code == 200) {
+                var card = document.getElementById("display_total");
+                card.innerHTML = "";
+                for (var i = 0; i < res.data.length; i++) {
+                    var p = document.createElement("p");
+                    var b = document.createElement("b");
+                    var span = document.createElement("span");
+                    b.innerHTML = res.data[i]['manufacturer_name'] + " : ";
+                    span.innerHTML = res.data[i]['total'] + "元";
+                    p.appendChild(b);
+                    p.appendChild(span);
+                    card.appendChild(p);
+                }
+            }
+        } else {
+            $.alert({
+                title: '錯誤',
+                content: '未輸入日期!!',
+                type: 'red',
+                typeAnimated: true
+            });
+        }
+        return false;
+    });
 }
 
 var balance_user_id;
@@ -1207,6 +1244,9 @@ function ButtonOnClickListener() {
             });
             return false;
         }
+    });
+    $('#btn_order_total').click(function () {
+        $('#modal-order_total').modal('show');
     });
 }
 

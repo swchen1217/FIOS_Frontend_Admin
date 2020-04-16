@@ -223,6 +223,39 @@
         </div>
     </div>
 
+    <div class="modal fade" tabindex="-1" id="modal-order_total">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">區間結算</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" id="form-total">
+                        <div class="form-group" style="margin-bottom: 5px">
+                            <label for="input_total_start">開始日期</label>
+                            <input type="text" class="form-control" placeholder="選擇日期" id="input_total_start"
+                                   style="margin-left: 5px;margin-right: 10px" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="input_total_end">結束日期</label>
+                            <input type="text" class="form-control" placeholder="選擇日期" id="input_total_end"
+                                   style="margin-left: 5px;margin-right: 10px" readonly>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="btn_total_submit">
+                            查詢
+                        </button>
+                    </form>
+                    <div class="card" id="card-total" style="border-color: #acbfd4;border-width: 2px;">
+                        <div class="card-body" id="display_total"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="Content_Home">
 
     </div>
@@ -378,6 +411,12 @@
                 <a class="btn btn-primary btn-block" id="btn_order_export"
                    style="height: 42px;color: #FFFFFF">
                     匯出訂單
+                </a>
+            </div>
+            <div class="col-6 col-sm-6 col-md-3 col-lg-2" style="padding: 10px 15px">
+                <a class="btn btn-primary btn-block" id="btn_order_total"
+                   style="height: 42px;color: #FFFFFF">
+                    區間結算
                 </a>
             </div>
         </div>

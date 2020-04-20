@@ -1524,3 +1524,4 @@ function orderDisplay(date) {
         $('#table_order').bootstrapTable('load', data);
     });
 }
+

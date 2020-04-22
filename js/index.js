@@ -863,7 +863,7 @@ var balance_account;
 function ButtonOnClickListener() {
     $('#btn_balance_query').click(function () {
         var account = $('#balance-account_input').val();
-        $('#balance-account_input').val();
+        $('#balance-account_input').val("");
         if (account == '') {
             $("#balance_block").hide();
             $.alert({

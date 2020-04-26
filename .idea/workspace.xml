@@ -31,7 +31,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../hsaec_page" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Currency_conversion_machine" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
@@ -75,7 +75,7 @@
       <workItem from="1586678266297" duration="1780000" />
       <workItem from="1587011744905" duration="1842000" />
       <workItem from="1587532379616" duration="207000" />
-      <workItem from="1587535988288" duration="3548000" />
+      <workItem from="1587535988288" duration="8802000" />
     </task>
     <servers />
   </component>
@@ -96,10 +96,10 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1585092489952">
+    <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1587797938404">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585092489952" />
+    <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1587797938404" />
     <state x="184" y="0" key="SettingsEditor" timestamp="1583384711726">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

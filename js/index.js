@@ -55,6 +55,14 @@ function init() {
         dateFormat: "yy-mm-dd"
     });
 
+    $("#input_balance_total_start").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+
+    $("#input_balance_total_end").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+
     $('#table_dish').bootstrapTable({
         dataType: "json",
         classes: "table table-bordered table-striped table-sm",
@@ -855,6 +863,49 @@ function FormSubmitListener() {
         }
         return false;
     });
+    $('#form-balance_total').submit(function () {
+        var startDate = $('#input_balance_total_start').val();
+        var endDate = $('#input_balance_total_end').val();
+        if (startDate != '' && endDate != '') {
+            var res = request('GET', '/balance/total/' + startDate + '/' + endDate, null);
+            if (res.code == 200) {
+                var card = document.getElementById("display_balance_total");
+                card.innerHTML = "";
+                var p = document.createElement("p");
+                var b = document.createElement("b");
+                var span = document.createElement("span");
+                b.innerHTML = "總儲值 : ";
+                span.innerHTML = res.data['topUp'] + "元";
+                p.appendChild(b);
+                p.appendChild(span);
+                card.appendChild(p);
+                var p = document.createElement("p");
+                var b = document.createElement("b");
+                var span = document.createElement("span");
+                b.innerHTML = "總扣款 : ";
+                span.innerHTML = res.data['deduct'] + "元";
+                p.appendChild(b);
+                p.appendChild(span);
+                card.appendChild(p);
+                var p = document.createElement("p");
+                var b = document.createElement("b");
+                var span = document.createElement("span");
+                b.innerHTML = "總收入 : ";
+                span.innerHTML = res.data['total'] + "元";
+                p.appendChild(b);
+                p.appendChild(span);
+                card.appendChild(p);
+            }
+        } else {
+            $.alert({
+                title: '錯誤',
+                content: '未輸入日期!!',
+                type: 'red',
+                typeAnimated: true
+            });
+        }
+        return false;
+    });
 }
 
 var balance_user_id;
@@ -1248,6 +1299,9 @@ function ButtonOnClickListener() {
     });
     $('#btn_order_total').click(function () {
         $('#modal-order_total').modal('show');
+    });
+    $('#btn_balance_total').click(function () {
+        $('#modal-balance_total').modal('show');
     });
 }
 

@@ -282,7 +282,13 @@
                         </button>
                     </form>
                     <div class="card" id="card-balance_total" style="border-color: #acbfd4;border-width: 2px;">
-                        <div class="card-body" id="display_balance_total"></div>
+                        <div class="card-body" id="display_balance_total" style="display: none">
+                            <p><b>總儲值 : </b><span id="display_balance_total_in"></span>元</p>
+                            <p><b>總便當支出 : </b><span id="display_balance_total_out"></span>元</p>
+                            <div id="display_balance_total_manufacturer" style="margin-left: 20px"></div>
+                            <p><b>預收貨款(區間) : </b><span id="display_balance_total_balance_date"></span>元</p>
+                            <p><b>預收貨款(全部) : </b><span id="display_balance_total_balance_all"></span>元</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -306,7 +312,7 @@
                     </div>
                     <div class="card-body">
                         <form role="form" class="form-my" id="form-newdish">
-                            <div class="form-group">4
+                            <div class="form-group">
                                 <label for="newdish-InputName">名稱 (A/B 餐點名稱)</label>
                                 <input type="text" class="form-control" id="newdish-InputName" placeholder="輸入名稱"
                                        required>

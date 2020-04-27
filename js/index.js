@@ -869,32 +869,23 @@ function FormSubmitListener() {
         if (startDate != '' && endDate != '') {
             var res = request('GET', '/balance/total/' + startDate + '/' + endDate, null);
             if (res.code == 200) {
-                var card = document.getElementById("display_balance_total");
-                card.innerHTML = "";
-                var p = document.createElement("p");
-                var b = document.createElement("b");
-                var span = document.createElement("span");
-                b.innerHTML = "總儲值 : ";
-                span.innerHTML = res.data['topUp'] + "元";
-                p.appendChild(b);
-                p.appendChild(span);
-                card.appendChild(p);
-                var p = document.createElement("p");
-                var b = document.createElement("b");
-                var span = document.createElement("span");
-                b.innerHTML = "總扣款 : ";
-                span.innerHTML = res.data['deduct'] + "元";
-                p.appendChild(b);
-                p.appendChild(span);
-                card.appendChild(p);
-                var p = document.createElement("p");
-                var b = document.createElement("b");
-                var span = document.createElement("span");
-                b.innerHTML = "總收入 : ";
-                span.innerHTML = res.data['total'] + "元";
-                p.appendChild(b);
-                p.appendChild(span);
-                card.appendChild(p);
+                $('#display_balance_total').show();
+                $('#display_balance_total_in').text(res.data['total_in']);
+                $('#display_balance_total_out').text(res.data['total_out']);
+                $('#display_balance_total_balance_date').text(res.data['total_balance_date']);
+                $('#display_balance_total_balance_all').text(res.data['total_balance_all']);
+                var div = document.getElementById("display_balance_total_manufacturer");
+                div.innerHTML = "";
+                for (var i = 0; i < res.data['out_manufacturer'].length; i++) {
+                    var p = document.createElement("p");
+                    var b = document.createElement("b");
+                    var span = document.createElement("span");
+                    b.innerHTML = res.data['out_manufacturer'][i]['manufacturer_name'] + " : ";
+                    span.innerHTML = res.data['out_manufacturer'][i]['total'] + "元";
+                    p.appendChild(b);
+                    p.appendChild(span);
+                    div.appendChild(p);
+                }
             }
         } else {
             $.alert({

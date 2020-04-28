@@ -281,15 +281,23 @@
                             查詢
                         </button>
                     </form>
-                    <div class="card" id="card-balance_total" style="border-color: #acbfd4;border-width: 2px;">
-                        <div class="card-body" id="display_balance_total" style="display: none">
-                            <p><b>總儲值 : </b><span id="display_balance_total_in"></span>元</p>
-                            <p><b>總便當支出 : </b><span id="display_balance_total_out"></span>元</p>
-                            <div id="display_balance_total_manufacturer" style="margin-left: 20px"></div>
-                            <p><b>預收貨款(區間) : </b><span id="display_balance_total_balance_date"></span>元</p>
-                            <p><b>預收貨款(全部) : </b><span id="display_balance_total_balance_all"></span>元</p>
+                    <div id="area_balance_total_print">
+                        <div class="card" id="card-balance_total" style="border-color: #acbfd4;border-width: 2px;">
+                            <div class="card-body" id="display_balance_total" style="display: none">
+                                <p style="text-align: center;font-size: larger"><b>日期區間 : <i><span id="display_balance_total_start"></span> ~ <span id="display_balance_total_end"></span></i></b></p>
+                                <p><b>總儲值 : </b><span id="display_balance_total_in"></span>元</p>
+                                <p><b>總便當支出 : </b><span id="display_balance_total_out"></span>元</p>
+                                <div id="display_balance_total_manufacturer" style="margin-left: 20px"></div>
+                                <p><b>預收貨款(區間) : </b><span id="display_balance_total_balance_date"></span>元</p>
+                                <p><b>預收貨款(全部) : </b><span id="display_balance_total_balance_all"></span>元</p>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="btn_balance_total_print">
+                        列印
+                    </button>
                 </div>
             </div>
         </div>

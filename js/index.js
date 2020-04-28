@@ -870,6 +870,8 @@ function FormSubmitListener() {
             var res = request('GET', '/balance/total/' + startDate + '/' + endDate, null);
             if (res.code == 200) {
                 $('#display_balance_total').show();
+                $('#display_balance_total_start').text(startDate);
+                $('#display_balance_total_end').text(endDate);
                 $('#display_balance_total_in').text(res.data['total_in']);
                 $('#display_balance_total_out').text(res.data['total_out']);
                 $('#display_balance_total_balance_date').text(res.data['total_balance_date']);
@@ -1293,6 +1295,13 @@ function ButtonOnClickListener() {
     });
     $('#btn_balance_total').click(function () {
         $('#modal-balance_total').modal('show');
+    });
+    $('#btn_balance_total_print').click(function () {
+        var bodyHtml = document.body.innerHTML;
+        document.body.innerHTML =$("#area_balance_total_print").html();
+        window.print();
+        document.body.innerHTML = bodyHtml;
+        window.location.reload();
     });
 }
 

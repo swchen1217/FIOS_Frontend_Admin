@@ -81,10 +81,10 @@ function init() {
             var html =
                 '<div class="row" style="margin: 0px;padding: 0px 55px">' +
                 '<div class="col-6">' +
-                '<p><b>熱量: </b>' + row['calories'] + ' Kcal</p>' +
-                '<p><b>蛋白質: </b>' + row['protein'] + ' g</p>' +
-                '<p><b>脂肪: </b>' + row['fat'] + ' g</p>' +
-                '<p><b>碳水化合物: </b>' + row['carbohydrate'] + ' g</p>' +
+                '<p><b>熱量: </b>' + escapeHtml(row['calories']) + ' Kcal</p>' +
+                '<p><b>蛋白質: </b>' + escapeHtml(row['protein']) + ' g</p>' +
+                '<p><b>脂肪: </b>' + escapeHtml(row['fat']) + ' g</p>' +
+                '<p><b>碳水化合物: </b>' + escapeHtml(row['carbohydrate']) + ' g</p>' +
                 '</div>';
             if (row['contents'].length != 0) {
                 html +=
@@ -92,11 +92,11 @@ function init() {
                     '<b>內容物: </b>' +
                     '<ul>';
                 for (var i = 0; i < row['contents'].length; i++)
-                    html += '<li>' + row['contents'][i] + '</li>';
+                    html += '<li>' + escapeHtml(row['contents'][i]) + '</li>';
                 html += '</ul>';
             }
             html += '</div>';
-            return escapeHtml(html);
+            return html;
         },
         columns: [{
             field: 'id',

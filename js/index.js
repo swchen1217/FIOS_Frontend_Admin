@@ -96,20 +96,29 @@ function init() {
                 html += '</ul>';
             }
             html += '</div>';
-            return html;
+            return escapeHtml(html);
         },
         columns: [{
             field: 'id',
             title: 'ID'
         }, {
             field: 'name',
-            title: '名稱'
+            title: '名稱',
+            formatter: function (data) {
+                return escapeHtml(data);
+            },
         }, {
             field: 'manufacturer_name',
-            title: '供應商'
+            title: '供應商',
+            formatter: function (data) {
+                return escapeHtml(data);
+            },
         }, {
             field: 'price',
-            title: '售價'
+            title: '售價',
+            formatter: function (data) {
+                return escapeHtml(data);
+            },
         }, {
             field: 'rating',
             title: '評分',
@@ -207,16 +216,28 @@ function init() {
             title: '餐點ID'
         }, {
             field: 'dish.name',
-            title: '餐點名稱'
+            title: '餐點名稱',
+            formatter: function (data) {
+                return escapeHtml(data);
+            },
         }, {
             field: 'dish.manufacturer_name',
-            title: '供應商'
+            title: '供應商',
+            formatter: function (data) {
+                return escapeHtml(data);
+            },
         }, {
             field: 'dish.price',
-            title: '售價'
+            title: '售價',
+            formatter: function (data) {
+                return escapeHtml(data);
+            },
         }, {
             field: 'status',
-            title: '狀態'
+            title: '狀態',
+            formatter: function (data) {
+                return escapeHtml(data);
+            },
         }, {
             field: 'created_at',
             title: '建立日期'
@@ -245,7 +266,10 @@ function init() {
             title: '帳號'
         }*/, {
             field: 'user_name',
-            title: '姓名'
+            title: '姓名',
+            formatter: function (data) {
+                return escapeHtml(data);
+            },
         }, {
             field: 'event',
             title: '事件'
@@ -257,7 +281,10 @@ function init() {
             title: '操作者姓名'
         }, {
             field: 'note',
-            title: '備註'
+            title: '備註',
+            formatter: function (data) {
+                return escapeHtml(data);
+            },
         }, {
             field: 'created_at',
             title: '建立日期'
@@ -1579,3 +1606,17 @@ function orderDisplay(date) {
     });
 }
 
+var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+};
+
+function escapeHtml(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+        return entityMap[s];
+    });
+}

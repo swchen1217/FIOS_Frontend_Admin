@@ -287,7 +287,9 @@
                     <div id="area_balance_total_print">
                         <div class="card" id="card-balance_total" style="border-color: #acbfd4;border-width: 2px;">
                             <div class="card-body" id="display_balance_total" style="display: none">
-                                <p style="text-align: center;font-size: larger"><b>日期區間 : <i><span id="display_balance_total_start"></span> ~ <span id="display_balance_total_end"></span></i></b></p>
+                                <p style="text-align: center;font-size: larger"><b>日期區間 : <i><span
+                                        id="display_balance_total_start"></span> ~ <span
+                                        id="display_balance_total_end"></span></i></b></p>
                                 <p><b>總儲值 : </b><span id="display_balance_total_in"></span>元</p>
                                 <p><b>總便當支出 : </b><span id="display_balance_total_out"></span>元</p>
                                 <div id="display_balance_total_manufacturer" style="margin-left: 20px"></div>
@@ -325,8 +327,25 @@
                         <form role="form" class="form-my" id="form-newdish">
                             <div class="form-group">
                                 <label for="newdish-InputName">名稱 (A/B 餐點名稱)</label>
-                                <input type="text" class="form-control" id="newdish-InputName" placeholder="輸入名稱"
-                                       required>
+                                <div class="row">
+                                    <div class="col-4" style="padding-right: 0px;margin-right: -20px;padding-top: 7px;">
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" class="custom-control-input" id="newdish-name-type-A"
+                                                   name="newdish-name-type" value="A" checked>
+                                            <label class="custom-control-label" for="newdish-name-type-A">A</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" class="custom-control-input" id="newdish-name-type-B"
+                                                   name="newdish-name-type" value="B">
+                                            <label class="custom-control-label" for="newdish-name-type-B">B</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-8" style="padding-left: 0px">
+                                        <input type="text" class="form-control" id="newdish-InputName"
+                                               placeholder="輸入名稱"
+                                               required>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>廠商</label>

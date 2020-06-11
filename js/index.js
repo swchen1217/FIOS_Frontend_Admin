@@ -766,6 +766,7 @@ function FormSubmitListener() {
         }
 
         if (name != "" && manufacturer_id != null && price != "") {
+            name = $('input[name*=ewdish-name-type]:checked').val() + " " + name;
             manufacturer_id = parseInt(manufacturer_id);
             price = parseInt(price);
             if (calories == "")
@@ -1325,7 +1326,7 @@ function ButtonOnClickListener() {
     });
     $('#btn_balance_total_print').click(function () {
         var bodyHtml = document.body.innerHTML;
-        document.body.innerHTML =$("#area_balance_total_print").html();
+        document.body.innerHTML = $("#area_balance_total_print").html();
         window.print();
         document.body.innerHTML = bodyHtml;
         window.location.reload();

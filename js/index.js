@@ -1,4 +1,5 @@
 var user;
+var announcement_level;
 
 function init() {
     $("#mNav .nav a").on("click", function () {
@@ -20,6 +21,29 @@ function init() {
             return false;
         }
     });
+
+    announcement_level = {
+        success: {
+            alert_class:"alert-success",
+            level_title:"成功：",
+            level_icon:"fa-check"
+        },
+        danger: {
+            alert_class:"alert-danger",
+            level_title:"錯誤：",
+            level_icon:"fa-times"
+        },
+        warning: {
+            alert_class:"alert-warning",
+            level_title:"警告：",
+            level_icon:"fa-exclamation-circle"
+        },
+        info: {
+            alert_class:"alert-info",
+            level_title:"資訊：",
+            level_icon:"fa-info"
+        }
+    }
 
     initManufacturerSelect();
 

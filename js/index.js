@@ -24,24 +24,24 @@ function init() {
 
     announcement_level = {
         success: {
-            alert_class:"alert-success",
-            level_title:"成功：",
-            level_icon:"fa-check"
+            alert_class: "alert-success",
+            level_title: "成功：",
+            level_icon: "fa-check"
         },
         danger: {
-            alert_class:"alert-danger",
-            level_title:"錯誤：",
-            level_icon:"fa-times"
+            alert_class: "alert-danger",
+            level_title: "錯誤：",
+            level_icon: "fa-times"
         },
         warning: {
-            alert_class:"alert-warning",
-            level_title:"警告：",
-            level_icon:"fa-exclamation-circle"
+            alert_class: "alert-warning",
+            level_title: "警告：",
+            level_icon: "fa-exclamation-circle"
         },
         info: {
-            alert_class:"alert-info",
-            level_title:"資訊：",
-            level_icon:"fa-info"
+            alert_class: "alert-info",
+            level_title: "資訊：",
+            level_icon: "fa-info"
         }
     }
 
@@ -333,6 +333,10 @@ function OnHashchangeListener() {
 
     if (hash == '') {
         $('#Content_Home').show();
+
+        getAnnouncement().then(data => {
+            displayAnnouncement(data);
+        });
     }
     if (hash == '#DishManage' && login_check() && PermissionCheck(false, true)) {
         $('#Content_DishManage').show();
@@ -1644,4 +1648,74 @@ function escapeHtml(string) {
     return String(string).replace(/[&<>"'\/]/g, function (s) {
         return entityMap[s];
     });
+}
+
+async function getAnnouncement() {
+    var res = request('GET', '/notify/admin');
+    return res.data;
+}
+
+function displayAnnouncement(data) {
+    for (var i = data.length - 1; i >= 0; i--) {
+        var dd = data[i];
+        var card = document.createElement("div");
+        card.className = "card";
+        card.style.borderWidth = "2px";
+        card.style.borderColor = "#a7a7a7";
+        var alert = document.createElement("div");
+        alert.className = "alert " + announcement_level[dd.level]['alert_class'];
+        alert.style.margin = "0px";
+        var alert_row = document.createElement("div");
+        alert_row.className = "row";
+        alert_row.style.lineHeight = "32px";
+        var alert_row_col_0 = document.createElement("div");
+        alert_row_col_0.className = "col-0";
+        var alert_row_col_0_row = document.createElement("div");
+        alert_row_col_0_row.className = "row";
+        alert_row_col_0_row.style.margin = "0px";
+        var alert_i = document.createElement("i");
+        alert_i.className = "fa fa-2x " + announcement_level[dd.level]['level_icon'];
+        alert_i.style.padding = "0px 10px";
+        alert_i.style.margin = "0px 5px";
+        var alert_col_0_span = document.createElement("span");
+        alert_col_0_span.style.margin = "0px";
+        alert_col_0_span.style.fontSize = "20px";
+        var alert_b = document.createElement("b");
+        var alert_row_col = document.createElement("div");
+        alert_row_col.className = "col";
+        alert_row_col.style.paddingLeft = "0px";
+        var alert_col_span = document.createElement("span");
+        alert_col_span.style.margin = "0px";
+        alert_col_span.style.fontSize = "20px";
+        var body = document.createElement("div");
+        body.className = "card-body";
+        body.style.padding = "10px";
+        var body_p_1 = document.createElement("p");
+        body_p_1.className = "card-text";
+        var body_p_2 = document.createElement("p");
+        body_p_2.style.textAlign = "right";
+        body_p_2.style.margin = "0px";
+
+        alert_b.innerHTML = escapeHtml(announcement_level[dd.level]['level_title']);
+        alert_col_span.innerHTML = escapeHtml(dd.title);
+        body_p_1.innerHTML = escapeHtml(dd.msg);
+        body_p_2.innerHTML = escapeHtml("張貼者：" + dd.author) + "&nbsp;&nbsp;&nbsp;" + escapeHtml("張貼時間：" + dd.time);
+
+
+        alert_row_col_0_row.appendChild(alert_i);
+        alert_col_0_span.appendChild(alert_b);
+        alert_row_col_0_row.appendChild(alert_col_0_span);
+        alert_row_col_0.appendChild(alert_row_col_0_row);
+        alert_row_col.appendChild(alert_col_span);
+        alert_row.appendChild(alert_row_col_0);
+        alert_row.appendChild(alert_row_col);
+        alert.appendChild(alert_row);
+        body.appendChild(body_p_1);
+        body.appendChild(body_p_2);
+        card.appendChild(alert);
+        card.appendChild(body);
+
+        var announcement = document.getElementById("announcement");
+        announcement.appendChild(card);
+    }
 }

@@ -450,6 +450,15 @@ function PermissionCheck(needAdmin, isAlert) {
     return true;
 }
 
+function roleCheck(role) {
+    let pass = false;
+    user['roles'].forEach(function (value) {
+        if (value == role)
+            pass = true;
+    });
+    return pass;
+}
+
 var dish_upload_photo_id;
 var dish_sale_dish_id;
 
@@ -561,12 +570,8 @@ window.operateEvents = {
                                 type: 'green',
                                 typeAnimated: true
                             });
-                            getOrderList().then(data => {
-                                $('#table_order').bootstrapTable('load', data);
-                            });
-                            getOrderInfo($('#order_info_date').val()).then(data => {
 
-                            });
+                            orderDisplay($('#order_info_date').val());
                         }
                         if (res.code == 400) {
                             if (res.data['error'] == 'Sales time has passed') {
@@ -1435,7 +1440,7 @@ async function getOrderInfo(date) {
         row.style.lineHeight = "32px";
         var col = document.createElement("div");
         col.className = "col";
-
+        // TODO
 
         order_info_sale.appendChild(col);
     }
@@ -1578,6 +1583,63 @@ async function getOrderInfo(date) {
     return true;
 }
 
+async function getOrderInfoManufacturer(date) {
+    var res = request('GET', '/order/date/' + date + '/manufacturer/' + user['number']);
+    var order_info_sale = document.getElementById("order_info_sale");
+    order_info_sale.innerHTML = "";
+    for (let i = 0; i < res.data.length; i++) {
+        let col = document.createElement("div");
+        col.className = "col-12 col-md-6";
+        col.style.padding = "0px 5px";
+        let card = document.createElement("div");
+        card.className = "card";
+        card.style.padding = "5px";
+        card.style.margin = "5px auto";
+        let card_header = document.createElement("div");
+        card_header.className = "card-header";
+        card_header.style.padding = "10px 20px";
+        let titleH5 = document.createElement("h5");
+        titleH5.style.marginBottom = "2px";
+        let card_body = document.createElement("div");
+        card_body.className = "card-body";
+        card_body.style.paddingTop = "15px";
+        card_body.style.paddingBottom = "10px";
+        let row = document.createElement("div");
+        row.className = "row";
+        let col_1 = document.createElement("div");
+        col_1.className = "col";
+        let col_2 = document.createElement("div");
+        col_2.className = "col";
+        let card_1 = document.createElement("div");
+        card_1.className = "card";
+        card_1.style.margin = "0px";
+        let p_1 = document.createElement("p");
+        p_1.style.margin = "0px";
+        let b_1 = document.createElement("b");
+        let span_1 = document.createElement("span");
+
+        titleH5.innerText = res.data[i]['manufacturer_name'] + " | " + res.data[i]['dish_name'];
+        b_1.innerText = "總數量: ";
+        span_1.innerText = res.data[i]['order_qty'];
+
+        card_header.appendChild(titleH5);
+        p_1.appendChild(b_1);
+        p_1.appendChild(span_1);
+        card_1.appendChild(p_1);
+        col_1.appendChild(card_1);
+        row.appendChild(col_1);
+        row.appendChild(col_2);
+        card_body.appendChild(row);
+        card.appendChild(card_header);
+        card.appendChild(card_body);
+        col.appendChild(card);
+
+        order_info_sale.appendChild(col);
+    }
+
+    return true;
+}
+
 function paddingLeft(str, lenght) {
     if (str.length >= lenght)
         return str;
@@ -1627,12 +1689,16 @@ function initManufacturerSelect() {
 
 function orderDisplay(date) {
     $('#order_info_date').val(date);
-    getOrderInfo(date).then(data => {
-
-    });
-    getOrderList(date).then(data => {
-        $('#table_order').bootstrapTable('load', data);
-    });
+    if (roleCheck('manufacturer')) {
+        getOrderInfoManufacturer(date).then(data => {
+        });
+    } else {
+        getOrderInfo(date).then(data => {
+        });
+        getOrderList(date).then(data => {
+            $('#table_order').bootstrapTable('load', data);
+        });
+    }
 }
 
 var entityMap = {
